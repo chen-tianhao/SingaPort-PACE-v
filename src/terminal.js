@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { PAL, mat, box, merge, ribbon, instanced, setInst } from './geo.js';
+import { PAL, mat, box, merge, ribbon, instanced, setInst, rng, pointInPoly } from './geo.js';
 
 const DECK = 5.0;
 
@@ -248,21 +248,16 @@ export function buildTerminal(data, group) {
 
   /* ---- terminal name plates */
   for (const t of data.terminals || []) {
-    const list = byTerm.get(t.id) || [];
-    if (!list.length) continue;
-    // median berth is more representative than the mean for wrap-around terminals
-    const ref = list[Math.floor((list.length - 1) / 2)];
-    const cx = ref.mid[0];
-    const cz = ref.mid[1];
-    const nx = ref.normal[0];
-    const nz = ref.normal[1];
-    const nl = Math.hypot(nx, nz) || 1;
+    // the anchor is the centroid of the terminal's own yard area, so the
+    // plate sits on its block instead of on the quay line or on a berth
+    // whose normal happens to point inland
+    if (!t.anchor) continue;
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({
       map: labelTex(t.id === 'PPAT' ? 'PPAT' : t.id.replace('PPT', 'PPT '), t.color, t.berth_range),
       transparent: true, depthTest: false, depthWrite: false,
       sizeAttenuation: false,          // constant on-screen size at any zoom
     }));
-    sp.position.set(cx - (nx / nl) * 55, DECK + 34, cz - (nz / nl) * 55);
+    sp.position.set(t.anchor[0], DECK + 34, t.anchor[1]);
     sp.scale.set(0.086, 0.0538, 1);
     sp.name = 'terminal_' + t.id;
     labels.add(sp);
@@ -278,19 +273,35 @@ export function buildBackdrop(data, group) {
   const g = new THREE.Group();
   const rot = -0.20;
 
-  const land = new THREE.Mesh(new THREE.BoxGeometry(9000, 16, 900), mat(0x5e6668, { roughness: 1 }));
-  land.position.set(1300, 4, -1620);
-  land.rotation.y = rot;
-  g.add(land);
+  // The city plate is derived from the terminal footprint instead of being
+  // hard-coded, so it always sits just north of the real land mass.
+  // (+Z is south in the local frame, so north = smaller Z.)
+  let zmin = Infinity, xmin = Infinity, xmax = -Infinity;
+  for (const p of data.land) {
+    zmin = Math.min(zmin, p[1]);
+    xmin = Math.min(xmin, p[0]);
+    xmax = Math.max(xmax, p[0]);
+  }
+  const PW = 9000, PD = 900;
+  const cx = (xmin + xmax) / 2 + 300;
+  const cz = zmin - 320;
 
-  const rand = (() => { let s = 99; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; })();
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(PW, 16, PD), mat(0x5e6668, { roughness: 1 }));
+  plate.position.set(cx, 4, cz);
+  plate.rotation.y = rot;
+  g.add(plate);
+
+  // city blocks: only on the city side of the terminal, never on the apron
+  const rand = rng(99);
   const blocks = [];
   const roofs = [];
-  for (let i = 0; i < 150; i++) {
-    const lx = -4300 + rand() * 8600;
-    const lz = -140 - rand() * 640;
-    const x = 1300 + lx * Math.cos(rot) + lz * Math.sin(rot);
-    const z = -1620 - lx * Math.sin(rot) + lz * Math.cos(rot);
+  for (let i = 0; i < 600 && blocks.length < 170; i++) {
+    const lx = -PW / 2 + 200 + rand() * (PW - 400);
+    const lz = -PD / 2 + 110 + rand() * (PD - 220);
+    const x = cx + lx * Math.cos(rot) + lz * Math.sin(rot);
+    const z = cz - lx * Math.sin(rot) + lz * Math.cos(rot);
+    if (z > zmin + 30) continue;                      // keep it north of the land
+    if (pointInPoly(x, z, data.land)) continue;        // never on the terminal
     const w = 40 + rand() * 90, d = 40 + rand() * 80, h = 12 + rand() * 60;
     blocks.push(box(w, h, d, x, 14 + h / 2, z, rot));
     roofs.push(box(w * 0.9, 1.2, d * 0.9, x, 14 + h + 0.6, z, rot));
@@ -298,8 +309,11 @@ export function buildBackdrop(data, group) {
   g.add(new THREE.Mesh(merge(blocks), mat(0x9aa3a8, { roughness: 0.9 })));
   g.add(new THREE.Mesh(merge(roofs), mat(0xb0b8bc, { roughness: 0.8 })));
 
-  const west = new THREE.Mesh(new THREE.BoxGeometry(2600, 18, 1800), mat(0x3b4547, { roughness: 1 }));
-  west.position.set(-4200, 5, 900);
+  // mainland west of the terminal (Jurong side), also derived from the footprint
+  // distant mainland to the north-west (Jurong side), kept far away so it
+  // reads as the opposite shore rather than a slab next to the terminal
+  const west = new THREE.Mesh(new THREE.BoxGeometry(7000, 18, 3200), mat(0x3b4547, { roughness: 1 }));
+  west.position.set(xmin - 4200, 5, zmin - 900);
   g.add(west);
 
   group.add(g);

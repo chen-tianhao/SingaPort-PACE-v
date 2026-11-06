@@ -147,7 +147,9 @@ runtime.onTick('vessel_V1', null);
 
 /* ------------------------------------------------------------------ HUD */
 document.getElementById('k-berth').textContent = data.meta.berths;
-document.getElementById('k-quay').innerHTML = data.meta.quay_length_model_m.toLocaleString('en').replace(/,/g, ' ') + '<span>m</span>';
+// HUD: the quay KPI shows the modelled frontage (the full chain), while the
+// published berth-box total is a different figure and is reported separately
+document.getElementById('k-quay').innerHTML = data.meta.quay_chain_m.toLocaleString('en').replace(/,/g, ' ') + '<span>m</span>';
 document.getElementById('k-qc').textContent = data.meta.quay_cranes;
 document.getElementById('k-yard').textContent = data.equipment.yard_cranes.total;
 document.getElementById('k-teu').textContent = yards.total.toLocaleString('en').replace(/,/g, ' ');
@@ -266,7 +268,9 @@ function animate() {
     lastCam.copy(camera.position);
     yards.update(camera.position);
     let l0 = 0, l1 = 0, l2 = 0;
-    for (const b of yards.blocks) (b.level === 0 ? l0++ : b.level === 1 ? l1 : l2++);
+    for (const b of yards.blocks) {
+      if (b.level === 0) l0++; else if (b.level === 1) l1++; else l2++;
+    }
     lodEl.textContent = `LOD ${l0} / ${l1} / ${l2}`;
   }
 

@@ -34,6 +34,7 @@ export function mat(color, opts = {}) {
     color, roughness: opts.roughness ?? 0.82, metalness: opts.metalness ?? 0.06,
     flatShading: !!opts.flat, transparent: !!opts.transparent, opacity: opts.opacity ?? 1,
     side: opts.side ?? THREE.FrontSide, depthWrite: opts.depthWrite ?? true,
+    vertexColors: !!opts.vertexColors,
   });
   cache.set(key, m);
   return m;
@@ -78,6 +79,18 @@ export function rng(seed) {
     s = (s * 1664525 + 1013904223) >>> 0;
     return s / 4294967296;
   };
+}
+
+/** Point-in-polygon (even-odd rule) in the local XZ plane. */
+export function pointInPoly(x, z, ring) {
+  if (!ring || ring.length < 3) return false;
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], zi = ring[i][1];
+    const xj = ring[j][0], zj = ring[j][1];
+    if ((zi > z) !== (zj > z) && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) inside = !inside;
+  }
+  return inside;
 }
 
 export function instanced(geo, material, count) {
