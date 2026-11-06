@@ -48,11 +48,12 @@ function qcGeometry(outreach = 54, height = 48, gauge = 30.48) {
   parts.push(box(2.0, 2.0, 24, -gx, height + 37, -8));
   parts.push(box(2.0, 2.0, 24, gx, height + 37, -8));
 
-  // machinery house, trolley, cabin
-  parts.push(box(16, 8, 14, 0, height + 7, -16));
+  // machinery house, trolley, cabin — kept shallow on the land side so the
+  // backreach does not reach into the first yard row
+  parts.push(box(14, 8, 8, 0, height + 7, -10));
   parts.push(box(6.0, 3.0, 6.0, 0, boomY + 3.6, 22));
   parts.push(box(3.6, 3.4, 3.6, 3.2, boomY - 2.6, 22));
-  parts.push(box(4.0, 2.0, 4.0, 0, height - 0.8, -14));
+  parts.push(box(4.0, 2.0, 4.0, 0, height - 0.8, -10));
   return merge(parts);
 }
 
@@ -218,6 +219,46 @@ export function buildYardCranes(data, group) {
 }
 
 /* ------------------------------------------------------------------ trucks */
+function pointInPoly(x, z, poly) {
+  let c = false;
+  for (let i = 0, n = poly.length; i < n; i++) {
+    const [x1, z1] = poly[i];
+    const [x2, z2] = poly[(i + 1) % n];
+    if ((z1 > z) !== (z2 > z)) {
+      const xi = x1 + ((z - z1) * (x2 - x1)) / (z2 - z1);
+      if (x < xi) c = !c;
+    }
+  }
+  return c;
+}
+
+function inYardBlock(x, z, yards) {
+  for (const y of yards) {
+    const rad = (y.angle * Math.PI) / 180;
+    const ca = Math.cos(rad), sa = Math.sin(rad);
+    const dx = x - y.c[0], dz = z - y.c[1];
+    const lx = dx * ca - dz * sa;
+    const lz = dx * sa + dz * ca;
+    if (Math.abs(lx) <= y.w / 2 + 1.2 && Math.abs(lz) <= y.l / 2 + 1.2) return true;
+  }
+  return false;
+}
+
+function nearestYardDist(x, z, yards) {
+  let best = Infinity;
+  for (const y of yards) {
+    const rad = (y.angle * Math.PI) / 180;
+    const ca = Math.cos(rad), sa = Math.sin(rad);
+    const dx = x - y.c[0], dz = z - y.c[1];
+    const lx = dx * ca - dz * sa;
+    const lz = dx * sa + dz * ca;
+    const ox = Math.max(Math.abs(lx) - y.w / 2, 0);
+    const oz = Math.max(Math.abs(lz) - y.l / 2, 0);
+    best = Math.min(best, Math.hypot(ox, oz));
+  }
+  return best;
+}
+
 export function buildTrucks(data, group) {
   const geo = merge([
     box(2.5, 2.9, 6.2, 0, 1.45, 4.4),        // cab
@@ -233,7 +274,7 @@ export function buildTrucks(data, group) {
     .map((r) => ({ ...r, spacing: 120 }))
     .concat((data.mainRoads || []).flatMap((r) =>
       r.pts.slice(1).map((p, i) => ({ a: r.pts[i], b: p, width: r.width, spacing: 220 }))))
-    .concat((data.yardLanes || []).map((r) => ({ ...r, spacing: 150 })));
+    .concat((data.yardLanes || []).map((r) => ({ ...r, spacing: 150, kind: 'lane' })));
 
   const list = [];
   const rand = rng(21);
@@ -247,12 +288,25 @@ export function buildTrucks(data, group) {
     for (let i = 0; i < n; i++) {
       const t = (i + 0.35 + rand() * 0.3) / n;
       const side = (rand() > 0.5 ? 1 : -1) * (lane * (0.25 + rand() * 0.7));
-      list.push({
-        x: r.a[0] + dx * t + (dz / len) * side,
-        z: r.a[1] + dz * t - (dx / len) * side,
-        rot: Math.atan2(-dz, dx) + (rand() > 0.5 ? 0 : Math.PI),
-        color: colors[(ri + i) % colors.length],
-      });
+      const x = r.a[0] + dx * t + (dz / len) * side;
+      const z = r.a[1] + dz * t - (dx / len) * side;
+      // the truck's long axis is local +Z; align it with the road
+      const rot = Math.atan2(dx, dz) + (rand() > 0.5 ? 0 : Math.PI);
+      const ux = Math.sin(rot), uz = Math.cos(rot);
+      // keep the whole 13 m truck on land and out of the container blocks
+      let ok = true;
+      for (const s of [-5.5, 0, 5.5]) {
+        const px = x + ux * s, pz = z + uz * s;
+        if (!pointInPoly(px, pz, data.land) || inYardBlock(px, pz, data.yards)) {
+          ok = false;
+          break;
+        }
+      }
+      if (!ok) continue;
+      // a yard lane through an empty area (PPAT, cleared apron) is not a
+      // working aisle any more: no trucks there
+      if (r.kind === 'lane' && nearestYardDist(x, z, data.yards) > 22) continue;
+      list.push({ x, z, rot, color: colors[(ri + i) % colors.length] });
     }
   });
   const m = instanced(geo, mat(0xffffff, { roughness: 0.7 }), list.length);
@@ -358,7 +412,7 @@ export function buildVessels(data, group) {
     const b = byBerth.get(v.berth);
     if (!b) continue;
     const ship = makeShip(v);
-    // berth tangent → ship heading along the quay
+    // berth tangent â†’ ship heading along the quay
     const dx = b.b[0] - b.a[0], dz = b.b[1] - b.a[1];
     const rot = Math.atan2(-dz, dx);
     ship.position.set(b.mid[0] + b.normal[0] * (v.beam / 2 + 26), 0, b.mid[1] + b.normal[1] * (v.beam / 2 + 26));
@@ -369,3 +423,4 @@ export function buildVessels(data, group) {
   }
   return out;
 }
+

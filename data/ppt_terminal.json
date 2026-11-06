@@ -20,7 +20,7 @@
   "max_draft_m": 18,
   "deck_m": 5,
   "geometry_source": "ESRI World Imagery z18, exact Web-Mercator registration; quay frontage = OSM way 557975391 (vertices 55-70) snapped onto the imagery water edge (max 18 m); footprint = OSM ways 325897191 + 868420646 clipped to imagery land; berth lengths from MPA Singapore Port Information 2025",
-  "yards": 817,
+  "yards": 720,
   "layout_revision": "2026-11-06b (main roads / gate / yard split / cranes)"
  },
  "land": [
@@ -3727,259 +3727,6 @@
    "yc": 1
   },
   {
-   "id": "Y062",
-   "tag": "A1",
-   "c": [
-    228.0,
-    -1094.5
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.25,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y062",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y063",
-   "tag": "A1",
-   "c": [
-    343.7,
-    -1025.8
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.404,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y063",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y064",
-   "tag": "A1",
-   "c": [
-    459.4,
-    -957.1
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.439,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y064",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y065",
-   "tag": "A1",
-   "c": [
-    575.1,
-    -888.4
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.422,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y065",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y066",
-   "tag": "A1",
-   "c": [
-    690.8,
-    -819.7
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.221,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y066",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y067",
-   "tag": "A1",
-   "c": [
-    806.5,
-    -751.0
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.27,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y067",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y068",
-   "tag": "A1",
-   "c": [
-    922.1,
-    -682.3
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.16,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y068",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y069",
-   "tag": "A1",
-   "c": [
-    1037.8,
-    -613.6
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.287,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y069",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y070",
-   "tag": "A1",
-   "c": [
-    1153.5,
-    -545.0
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.144,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y070",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y071",
-   "tag": "A1",
-   "c": [
-    1269.2,
-    -476.3
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.262,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y071",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y072",
-   "tag": "A1",
-   "c": [
-    1384.9,
-    -407.6
-   ],
-   "w": 32.0,
-   "l": 118.0,
-   "angle": 59.3,
-   "rows": 12,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.152,
-   "crane": "RTG",
-   "terminal": "PPT1",
-   "group": "Y072",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
    "id": "Y073",
    "tag": "A2",
    "c": [
@@ -5291,29 +5038,6 @@
    "yc": 1
   },
   {
-   "id": "Y130a",
-   "tag": "B",
-   "c": [
-    -411.57,
-    -596.16
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.251,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y130",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y130b",
    "tag": "B",
    "c": [
@@ -5611,29 +5335,6 @@
    "group": "Y136",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y137a",
-   "tag": "B",
-   "c": [
-    -427.47,
-    -569.56
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.893,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y137",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y137b",
@@ -7223,29 +6924,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y172a",
-   "tag": "B",
-   "c": [
-    -724.27,
-    -565.46
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.554,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y172",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y172b",
    "tag": "B",
    "c": [
@@ -7589,29 +7267,6 @@
    "group": "Y179",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y180a",
-   "tag": "B",
-   "c": [
-    -740.07,
-    -538.86
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.458,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y180",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y180b",
@@ -7959,75 +7614,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y188a",
-   "tag": "B",
-   "c": [
-    -755.87,
-    -512.16
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.149,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y188",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y188b",
-   "tag": "B",
-   "c": [
-    -647.53,
-    -447.84
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.149,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y188",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y189a",
-   "tag": "B",
-   "c": [
-    -538.27,
-    -382.96
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.098,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y189",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y189b",
    "tag": "B",
    "c": [
@@ -8325,75 +7911,6 @@
    "group": "Y195",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y196a",
-   "tag": "B",
-   "c": [
-    -771.67,
-    -485.56
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.384,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y196",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y196b",
-   "tag": "B",
-   "c": [
-    -663.33,
-    -421.24
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.384,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y196",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y197a",
-   "tag": "B",
-   "c": [
-    -554.07,
-    -356.26
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.367,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y197",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y197b",
@@ -8695,75 +8212,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y204a",
-   "tag": "B",
-   "c": [
-    -787.57,
-    -458.86
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.325,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y204",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y204b",
-   "tag": "B",
-   "c": [
-    -679.23,
-    -394.54
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.325,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y204",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y205a",
-   "tag": "B",
-   "c": [
-    -569.87,
-    -329.66
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.463,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y205",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y205b",
    "tag": "B",
    "c": [
@@ -9061,75 +8509,6 @@
    "group": "Y211",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y212a",
-   "tag": "B",
-   "c": [
-    -803.37,
-    -432.26
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.548,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y212",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y212b",
-   "tag": "B",
-   "c": [
-    -695.03,
-    -367.94
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.548,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y212",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y213a",
-   "tag": "B",
-   "c": [
-    -585.67,
-    -302.96
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.529,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y213",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y213b",
@@ -9431,75 +8810,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y220a",
-   "tag": "B",
-   "c": [
-    -819.17,
-    -405.56
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.467,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y220",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y220b",
-   "tag": "B",
-   "c": [
-    -710.83,
-    -341.24
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.467,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y220",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y221a",
-   "tag": "B",
-   "c": [
-    -601.57,
-    -276.36
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.31,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y221",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y221b",
    "tag": "B",
    "c": [
@@ -9797,75 +9107,6 @@
    "group": "Y227",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y228a",
-   "tag": "B",
-   "c": [
-    -834.97,
-    -378.86
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.3,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y228",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y228b",
-   "tag": "B",
-   "c": [
-    -726.63,
-    -314.54
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.3,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y228",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y229a",
-   "tag": "B",
-   "c": [
-    -617.37,
-    -249.66
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.106,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y229",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y229b",
@@ -10167,75 +9408,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y236a",
-   "tag": "B",
-   "c": [
-    -850.87,
-    -352.26
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.253,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y236",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y236b",
-   "tag": "B",
-   "c": [
-    -742.53,
-    -287.94
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.253,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y236",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y237a",
-   "tag": "B",
-   "c": [
-    -633.17,
-    -223.06
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.746,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y237",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y237b",
    "tag": "B",
    "c": [
@@ -10533,75 +9705,6 @@
    "group": "Y243",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y244a",
-   "tag": "B",
-   "c": [
-    -866.67,
-    -325.56
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.392,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y244",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y244b",
-   "tag": "B",
-   "c": [
-    -758.33,
-    -261.24
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.392,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y244",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y245a",
-   "tag": "B",
-   "c": [
-    -648.97,
-    -196.36
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.702,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y245",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y245b",
@@ -10903,75 +10006,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y252a",
-   "tag": "B",
-   "c": [
-    -882.47,
-    -298.96
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.269,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y252",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y252b",
-   "tag": "B",
-   "c": [
-    -774.13,
-    -234.64
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.269,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y252",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y253a",
-   "tag": "B",
-   "c": [
-    -664.87,
-    -169.76
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.714,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y253",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y253b",
    "tag": "B",
    "c": [
@@ -11269,75 +10303,6 @@
    "group": "Y259",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y260a",
-   "tag": "B",
-   "c": [
-    -898.27,
-    -272.26
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.316,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y260",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y260b",
-   "tag": "B",
-   "c": [
-    -789.93,
-    -207.94
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.316,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y260",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y261a",
-   "tag": "B",
-   "c": [
-    -680.67,
-    -143.06
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y261",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y261b",
@@ -11639,75 +10604,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y268a",
-   "tag": "B",
-   "c": [
-    -914.17,
-    -245.66
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.145,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y268",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y268b",
-   "tag": "B",
-   "c": [
-    -805.83,
-    -181.34
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.145,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y268",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y269a",
-   "tag": "B",
-   "c": [
-    -696.47,
-    -116.36
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.857,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y269",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y269b",
    "tag": "B",
    "c": [
@@ -12005,75 +10901,6 @@
    "group": "Y275",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y276a",
-   "tag": "B",
-   "c": [
-    -929.97,
-    -218.96
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.34,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y276",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y276b",
-   "tag": "B",
-   "c": [
-    -821.63,
-    -154.64
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.34,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y276",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y277a",
-   "tag": "B",
-   "c": [
-    -712.37,
-    -89.76
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.582,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y277",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y277b",
@@ -12375,75 +11202,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y284a",
-   "tag": "B",
-   "c": [
-    -945.77,
-    -192.36
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.407,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y284",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y284b",
-   "tag": "B",
-   "c": [
-    -837.43,
-    -128.04
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.407,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y284",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y285a",
-   "tag": "B",
-   "c": [
-    -728.17,
-    -63.06
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.662,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y285",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y285b",
    "tag": "B",
    "c": [
@@ -12741,75 +11499,6 @@
    "group": "Y291",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y292a",
-   "tag": "B",
-   "c": [
-    -961.67,
-    -165.66
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.25,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y292",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y292b",
-   "tag": "B",
-   "c": [
-    -853.33,
-    -101.34
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.25,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y292",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y293a",
-   "tag": "B",
-   "c": [
-    -743.97,
-    -36.46
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.754,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y293",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y293b",
@@ -13111,75 +11800,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y300a",
-   "tag": "B",
-   "c": [
-    -977.47,
-    -138.96
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.173,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y300",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y300b",
-   "tag": "B",
-   "c": [
-    -869.13,
-    -74.64
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.173,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y300",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y301a",
-   "tag": "B",
-   "c": [
-    -759.77,
-    -9.76
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.707,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y301",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y301b",
    "tag": "B",
    "c": [
@@ -13477,75 +12097,6 @@
    "group": "Y307",
    "yc": 0,
    "yc_t": 0.0
-  },
-  {
-   "id": "Y308a",
-   "tag": "B",
-   "c": [
-    -993.27,
-    -112.36
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.609,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y308",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y308b",
-   "tag": "B",
-   "c": [
-    -884.93,
-    -48.04
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.609,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y308",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y309a",
-   "tag": "B",
-   "c": [
-    -775.67,
-    16.84
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.441,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y309",
-   "yc": 1,
-   "yc_t": 0.5
   },
   {
    "id": "Y309b",
@@ -13847,75 +12398,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y316a",
-   "tag": "B",
-   "c": [
-    -1009.07,
-    -85.66
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.297,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y316",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y316b",
-   "tag": "B",
-   "c": [
-    -900.73,
-    -21.34
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.297,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y316",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y317a",
-   "tag": "B",
-   "c": [
-    -791.47,
-    43.54
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.268,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y317",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
    "id": "Y317b",
    "tag": "B",
    "c": [
@@ -14215,374 +12697,6 @@
    "yc_t": 0.0
   },
   {
-   "id": "Y324a",
-   "tag": "B",
-   "c": [
-    -1024.97,
-    -59.06
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.287,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y324",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y324b",
-   "tag": "B",
-   "c": [
-    -916.63,
-    5.26
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.287,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y324",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y325a",
-   "tag": "B",
-   "c": [
-    -807.27,
-    70.14
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.126,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y325",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y325b",
-   "tag": "B",
-   "c": [
-    -698.93,
-    134.46
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.126,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y325",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y326a",
-   "tag": "B",
-   "c": [
-    -589.67,
-    199.44
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.232,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y326",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y326b",
-   "tag": "B",
-   "c": [
-    -481.33,
-    263.76
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.232,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y326",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y327a",
-   "tag": "B",
-   "c": [
-    -371.97,
-    328.64
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.124,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y327",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y327b",
-   "tag": "B",
-   "c": [
-    -263.63,
-    392.96
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.124,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y327",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y328a",
-   "tag": "B",
-   "c": [
-    -154.37,
-    457.84
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.207,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y328",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y328b",
-   "tag": "B",
-   "c": [
-    -46.03,
-    522.16
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.207,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y328",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y329a",
-   "tag": "B",
-   "c": [
-    63.33,
-    587.14
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.296,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y329",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y329b",
-   "tag": "B",
-   "c": [
-    171.67,
-    651.46
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.296,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y329",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y330a",
-   "tag": "B",
-   "c": [
-    280.93,
-    716.34
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.33,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y330",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y330b",
-   "tag": "B",
-   "c": [
-    389.27,
-    780.66
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.33,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y330",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
-   "id": "Y331a",
-   "tag": "B",
-   "c": [
-    498.63,
-    845.54
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.475,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y331",
-   "yc": 1,
-   "yc_t": 0.5
-  },
-  {
-   "id": "Y331b",
-   "tag": "B",
-   "c": [
-    606.97,
-    909.86
-   ],
-   "w": 19.5,
-   "l": 120.0,
-   "angle": 59.3,
-   "rows": 7,
-   "bays": 8,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.475,
-   "crane": "RTG",
-   "terminal": "PPT2",
-   "group": "Y331",
-   "yc": 0,
-   "yc_t": 0.0
-  },
-  {
    "id": "Y332",
    "tag": "C",
    "c": [
@@ -14740,29 +12854,6 @@
    "crane": "RMG",
    "terminal": "PPT3",
    "group": "Y338",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y339",
-   "tag": "C",
-   "c": [
-    738.1,
-    872.2
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y339",
    "yc_t": -0.5,
    "yc": 1
   },
@@ -14928,52 +13019,6 @@
    "yc": 1
   },
   {
-   "id": "Y347",
-   "tag": "C",
-   "c": [
-    789.7,
-    902.9
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y347",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y348",
-   "tag": "C",
-   "c": [
-    1662.4,
-    -449.4
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.242,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y348",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
    "id": "Y349",
    "tag": "C",
    "c": [
@@ -15108,29 +13153,6 @@
    "crane": "RMG",
    "terminal": "PPT3",
    "group": "Y354",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y355",
-   "tag": "C",
-   "c": [
-    841.3,
-    933.5
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.585,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y355",
    "yc_t": -0.5,
    "yc": 1
   },
@@ -15273,29 +13295,6 @@
    "yc": 1
   },
   {
-   "id": "Y363",
-   "tag": "C",
-   "c": [
-    892.9,
-    964.1
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y363",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
    "id": "Y365",
    "tag": "C",
    "c": [
@@ -15430,29 +13429,6 @@
    "crane": "RMG",
    "terminal": "PPT3",
    "group": "Y370",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y371",
-   "tag": "C",
-   "c": [
-    944.5,
-    994.7
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y371",
    "yc_t": -0.5,
    "yc": 1
   },
@@ -15595,29 +13571,6 @@
    "yc": 1
   },
   {
-   "id": "Y379",
-   "tag": "C",
-   "c": [
-    996.1,
-    1025.4
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y379",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
    "id": "Y381",
    "tag": "C",
    "c": [
@@ -15752,52 +13705,6 @@
    "crane": "RMG",
    "terminal": "PPT3",
    "group": "Y386",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y387",
-   "tag": "C",
-   "c": [
-    1047.7,
-    1056.0
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y387",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y388",
-   "tag": "C",
-   "c": [
-    1920.4,
-    -296.2
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.45,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y388",
    "yc_t": -0.5,
    "yc": 1
   },
@@ -15940,52 +13847,6 @@
    "yc": 1
   },
   {
-   "id": "Y395",
-   "tag": "C",
-   "c": [
-    1099.3,
-    1086.6
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y395",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y396",
-   "tag": "C",
-   "c": [
-    1972.0,
-    -265.6
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.467,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y396",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
    "id": "Y397",
    "tag": "C",
    "c": [
@@ -16120,29 +13981,6 @@
    "crane": "RMG",
    "terminal": "PPT3",
    "group": "Y402",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y403",
-   "tag": "C",
-   "c": [
-    1150.9,
-    1117.3
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.95,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y403",
    "yc_t": -0.5,
    "yc": 1
   },
@@ -16304,29 +14142,6 @@
    "crane": "RMG",
    "terminal": "PPT3",
    "group": "Y410",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y411",
-   "tag": "C",
-   "c": [
-    1202.5,
-    1147.9
-   ],
-   "w": 34.0,
-   "l": 210.0,
-   "angle": -30.7,
-   "rows": 12,
-   "bays": 15,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.733,
-   "crane": "RMG",
-   "terminal": "PPT3",
-   "group": "Y411",
    "yc_t": -0.5,
    "yc": 1
   },
@@ -21067,64 +18882,18 @@
    "group": "Y617",
    "yc_t": -0.5,
    "yc": 1
-  },
-  {
-   "id": "Y618",
-   "tag": "D",
-   "c": [
-    2934.5,
-    2498.1
-   ],
-   "w": 30.0,
-   "l": 132.0,
-   "angle": -30.7,
-   "rows": 11,
-   "bays": 9,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.336,
-   "crane": "RMG",
-   "terminal": "PPT6",
-   "group": "Y618",
-   "yc_t": -0.5,
-   "yc": 1
-  },
-  {
-   "id": "Y619",
-   "tag": "D",
-   "c": [
-    2861.2,
-    2621.4
-   ],
-   "w": 30.0,
-   "l": 132.0,
-   "angle": -30.7,
-   "rows": 11,
-   "bays": 9,
-   "tiers": 5,
-   "row_pitch": 2.6,
-   "bay_pitch": 13.4,
-   "tier_h": 2.62,
-   "fill": 0.32,
-   "crane": "RMG",
-   "terminal": "PPT6",
-   "group": "Y619",
-   "yc_t": -0.5,
-   "yc": 0
   }
  ],
  "roads": [
   {
    "id": "R1",
    "a": [
-    83.55902461198255,
-    -1092.6182258718038
+    77.0,
+    -1081.4
    ],
    "b": [
-    1156.9482880550415,
-    -463.4576929283102
+    1150.4,
+    -452.2
    ],
    "width": 22,
    "type": "quay"
@@ -21132,12 +18901,12 @@
   {
    "id": "R2",
    "a": [
-    1156.9482880550415,
-    -463.4576929283102
+    1153.4,
+    -450.9
    ],
    "b": [
-    1310.363255908119,
-    -420.21907918583497
+    1306.8,
+    -407.7
    ],
    "width": 22,
    "type": "quay"
@@ -21145,12 +18914,12 @@
   {
    "id": "R3",
    "a": [
-    1310.363255908119,
-    -420.21907918583497
+    1299.2,
+    -426.9
    ],
    "b": [
-    978.1526570578496,
-    135.63376436691414
+    967.0,
+    129.0
    ],
    "width": 22,
    "type": "quay"
@@ -21158,12 +18927,12 @@
   {
    "id": "R4",
    "a": [
-    978.1526570578496,
-    135.63376436691414
+    985.9,
+    125.2
    ],
    "b": [
-    778.6226210253653,
-    -12.601715819218114
+    786.4,
+    -23.0
    ],
    "width": 22,
    "type": "quay"
@@ -21171,12 +18940,12 @@
   {
    "id": "R5",
    "a": [
-    778.6226210253653,
-    -12.601715819218114
+    785.2,
+    -23.8
    ],
    "b": [
-    -374.57821629985864,
-    -695.9025431921685
+    -368.0,
+    -707.1
    ],
    "width": 22,
    "type": "quay"
@@ -21184,12 +18953,12 @@
   {
    "id": "R6",
    "a": [
-    -374.57821629985864,
-    -695.9025431921685
+    -376.6,
+    -708.7
    ],
    "b": [
-    -818.4689770839245,
-    -626.992868170581
+    -820.5,
+    -639.8
    ],
    "width": 22,
    "type": "quay"
@@ -21197,12 +18966,12 @@
   {
    "id": "R7",
    "a": [
-    -818.4689770839245,
-    -626.992868170581
+    -830.1,
+    -632.8
    ],
    "b": [
-    -1126.0346809806183,
-    -12.57786322576544
+    -1137.7,
+    -18.4
    ],
    "width": 22,
    "type": "quay"
@@ -21210,12 +18979,12 @@
   {
    "id": "R8",
    "a": [
-    -1126.0346809806183,
-    -12.57786322576544
+    -1132.7,
+    -1.4
    ],
    "b": [
-    1182.9137498598536,
-    1359.0294497538714
+    1176.3,
+    1370.2
    ],
    "width": 22,
    "type": "quay"
@@ -21223,12 +18992,12 @@
   {
    "id": "R9",
    "a": [
-    1182.9137498598536,
-    1359.0294497538714
+    1194.0,
+    1365.8
    ],
    "b": [
-    1890.5779838994429,
-    206.49309109860184
+    1901.7,
+    213.3
    ],
    "width": 22,
    "type": "quay"
@@ -21236,12 +19005,12 @@
   {
    "id": "R10",
    "a": [
-    1890.5779838994429,
-    206.49309109860184
+    1883.8,
+    217.6
    ],
    "b": [
-    2915.1748841626377,
-    837.8137412066811
+    2908.4,
+    848.9
    ],
    "width": 22,
    "type": "quay"
@@ -21249,12 +19018,12 @@
   {
    "id": "R11",
    "a": [
-    2915.1748841626377,
-    837.8137412066811
+    2905.2,
+    829.5
    ],
    "b": [
-    2739.460122368966,
-    1049.1551358586873
+    2729.5,
+    1040.8
    ],
    "width": 22,
    "type": "quay"
@@ -21262,12 +19031,12 @@
   {
    "id": "R12",
    "a": [
-    2739.460122368966,
-    1049.1551358586873
+    2728.2,
+    1042.6
    ],
    "b": [
-    2004.7696791755345,
-    2302.5423839069936
+    1993.6,
+    2296.0
    ],
    "width": 22,
    "type": "quay"
@@ -21275,12 +19044,12 @@
   {
    "id": "R13",
    "a": [
-    2004.7696791755345,
-    2302.5423839069936
+    1998.1,
+    2313.7
    ],
    "b": [
-    2858.826930872002,
-    2816.0222841572245
+    2852.1,
+    2827.2
    ],
    "width": 22,
    "type": "quay"
@@ -21288,12 +19057,12 @@
   {
    "id": "R14",
    "a": [
-    2858.826930872002,
-    2816.0222841572245
+    2869.9,
+    2822.8
    ],
    "b": [
-    3579.449569918644,
-    1639.2247038039516
+    3590.5,
+    1646.0
    ],
    "width": 22,
    "type": "quay"
@@ -21301,12 +19070,12 @@
   {
    "id": "R15",
    "a": [
-    3579.449569918644,
-    1639.2247038039516
+    3590.7,
+    1645.8
    ],
    "b": [
-    3977.319959359177,
-    958.0033382444502
+    3988.5,
+    964.6
    ],
    "width": 22,
    "type": "quay"
@@ -21565,11 +19334,11 @@
    "twin_lift_t": 65
   },
   "yard_cranes": {
-   "total": 511,
-   "rtg": 331,
-   "rmg": 180,
+   "total": 440,
+   "rtg": 274,
+   "rmg": 166,
    "ohbc": 0,
-   "source": "satellite count 2026-11-06: 1/RTG block, 1/2 RMG blocks"
+   "source": "satellite count 2026-11-06; blocks filtered for apron/PPAT/gate"
   },
   "prime_movers": 260
  },
