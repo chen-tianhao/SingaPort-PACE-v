@@ -95,24 +95,72 @@ function ohbcGeometry(span = 45.4, girderH = 28) {
 export function buildQuayCranes(data, group) {
   const berths = data.berths.filter((b) => b.type === 'container');
   const placements = [];
-  for (const b of berths) {
-    const dx = b.b[0] - b.a[0], dz = b.b[1] - b.a[1];
-    const len = Math.hypot(dx, dz);
-    const ux = dx / len, uz = dz / len;
-    const n = b.qc;
-    // cluster the cranes at a realistic pitch instead of spreading them evenly
-    const pitch = n > 1 ? Math.min(38, (len - 40) / (n - 1)) : 0;
-    const t0 = n > 1 ? (len - pitch * (n - 1)) / 2 / len : 0.5;
-    for (let i = 0; i < n; i++) {
-      const t = t0 + (i * pitch) / len;
-      // stand the crane back from the quay edge by 12 m
-      const x = b.a[0] + dx * t - b.normal[0] * 12;
-      const z = b.a[1] + dz * t - b.normal[1] * 12;
-      // crane local +Z must point at the water
-      const rot = Math.atan2(b.normal[0], b.normal[1]);
-      placements.push({ x, z, rot, mega: b.depth >= 16 });
+
+  // Cranes are allocated per terminal and spread along that terminal's whole
+  // frontage, not packed into the middle of each berth.  A terminal whose
+  // quay is interrupted (PPT2, cut by PPAT) is split into contiguous groups
+  // and each group gets cranes in proportion to its length.
+  for (const t of data.terminals) {
+    const list = berths.filter((b) => b.terminal === t.id);
+    if (!list.length || !t.qc) continue;
+
+    const groups = [];
+    for (const b of list) {
+      const g = groups[groups.length - 1];
+      if (g && Math.hypot(g.end[0] - b.a[0], g.end[1] - b.a[1]) < 60) {
+        g.list.push(b);
+        g.end = b.b;
+      } else {
+        groups.push({ list: [b], start: b.a, end: b.b });
+      }
     }
+    let totalLen = 0;
+    for (const g of groups) {
+      const pts = [g.start];
+      for (const b of g.list) pts.push(b.b);
+      g.segs = [];
+      g.len = 0;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i], c = pts[i + 1];
+        const L = Math.hypot(c[0] - a[0], c[1] - a[1]);
+        g.segs.push({ a, c, L, s: g.len });
+        g.len += L;
+      }
+      totalLen += g.len;
+    }
+
+    let left = t.qc;
+    groups.forEach((g, gi) => {
+      const n = gi === groups.length - 1
+        ? left
+        : Math.max(1, Math.round(t.qc * g.len / totalLen));
+      left -= n;
+      if (!n) return;
+      const margin = Math.min(30, g.len * 0.05);
+      const pitch = n > 1 ? (g.len - 2 * margin) / (n - 1) : 0;
+      for (let i = 0; i < n; i++) {
+        const s = n > 1 ? margin + i * pitch : g.len / 2;
+        let seg = g.segs[g.segs.length - 1];
+        for (const q of g.segs) if (s <= q.s + q.L) { seg = q; break; }
+        const u = seg.L ? (s - seg.s) / seg.L : 0;
+        const x = seg.a[0] + (seg.c[0] - seg.a[0]) * u;
+        const z = seg.a[1] + (seg.c[1] - seg.a[1]) * u;
+        let b = g.list[0], best = Infinity;
+        for (const q of g.list) {
+          const d = Math.hypot(q.mid[0] - x, q.mid[1] - z);
+          if (d < best) { best = d; b = q; }
+        }
+        const setback = 20;      // rail centre sits behind the coping
+        placements.push({
+          x: x - b.normal[0] * setback,
+          z: z - b.normal[1] * setback,
+          rot: Math.atan2(b.normal[0], b.normal[1]),
+          mega: b.depth >= 16,
+        });
+      }
+    });
   }
+
   const mega = placements.filter((p) => p.mega);
   const std = placements.filter((p) => !p.mega);
 
@@ -144,19 +192,18 @@ export function buildYardCranes(data, group) {
   const ohbcGeo = ohbcGeometry();
 
   const rmg = [], rtg = [], ohbc = [];
+  // `yc` is a 0/1 flag per block: one yard crane per RTG block, one per two
+  // RMG blocks.  `yc_t` places it at the block end (+0.5 / −0.5 of its own
+  // length), which is where RTGs/RMGs actually park and work from.
   for (const y of data.yards) {
+    if (!y.yc) continue;
     const rad = (y.angle * Math.PI) / 180;
-    const ca = Math.cos(rad), sa = Math.sin(rad);
-    // one straddle carrier per block; long blocks get a second unit spaced
-    // along the block's own axis so it always reads as "across the stacks"
-    const n = y.l >= 210 ? 2 : 1;
-    for (let i = 0; i < n; i++) {
-      const dz = n === 1 ? 0 : (i - (n - 1) / 2) * y.l * 0.42;
-      const item = { x: y.c[0] + dz * sa, z: y.c[1] + dz * ca, rot: rad };
-      if (y.crane === 'OHBC') ohbc.push(item);
-      else if (y.crane === 'RMG') rmg.push(item);
-      else rtg.push(item);
-    }
+    const sa = Math.sin(rad), ca = Math.cos(rad);
+    const off = (y.yc_t ?? -0.5) * y.l / 2;
+    const item = { x: y.c[0] + off * sa, z: y.c[1] + off * ca, rot: rad };
+    if (y.crane === 'OHBC') ohbc.push(item);
+    else if (y.crane === 'RMG') rmg.push(item);
+    else rtg.push(item);
   }
 
   const mk = (list, geo, color) => {
@@ -184,6 +231,8 @@ export function buildTrucks(data, group) {
   const roads = data.roads
     .filter((r) => r.type === 'quay')
     .map((r) => ({ ...r, spacing: 120 }))
+    .concat((data.mainRoads || []).flatMap((r) =>
+      r.pts.slice(1).map((p, i) => ({ a: r.pts[i], b: p, width: r.width, spacing: 220 }))))
     .concat((data.yardLanes || []).map((r) => ({ ...r, spacing: 150 })));
 
   const list = [];

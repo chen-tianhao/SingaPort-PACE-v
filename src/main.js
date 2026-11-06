@@ -54,7 +54,7 @@ HUD_MQ.addEventListener('change', (e) => {
 });
 
 /* =====================================================================
-   Runtime — the hook layer for future dynamic behaviour.
+   Runtime â€” the hook layer for future dynamic behaviour.
    Every static object can be registered and later animated without
    touching the builder code. tick(dt) drives all registered entities.
    ===================================================================== */
@@ -199,7 +199,7 @@ for (const v of vessels) {
   const obj = vesselGroup.children.find((c) => c.name === 'vessel_' + v.id);
   if (obj) runtime.register('vessel_' + v.id, obj, v);
 }
-// example hook: ships idle on a 12 s bob — disabled by default, kept as a template
+// example hook: ships idle on a 12 s bob â€” disabled by default, kept as a template
 runtime.onTick('vessel_V1', null);
 
 /* ------------------------------------------------------------------ HUD */
@@ -219,7 +219,7 @@ if (termList && data.terminals) {
   termList.innerHTML = data.terminals.map((t) => `
     <div class="trow">
       <i style="background:${t.color}"></i><b>${t.id}</b>
-      <span>${t.berth_range}</span><em>${t.n}p · ${t.quay} m</em>
+      <span>${t.berth_range}</span><em>${t.n}p Â· ${t.quay} m</em>
     </div>`).join('');
 }
 
@@ -255,7 +255,7 @@ const VIEWS = {
   overview: { pos: [_cx - _span * 0.15, _span * 1.35, _cz + _span * 0.55], tgt: [_cx - _span * 0.10, 0, _cz] },
   berth:    { pos: [_b.mid[0] + _n[0] * 520, 165, _b.mid[1] + _n[1] * 520], tgt: [_b.mid[0] + _n[0] * 70, 38, _b.mid[1] + _n[1] * 70] },
   yard:     { pos: [_b.mid[0] - _n[0] * 520, 230, _b.mid[1] - _n[1] * 520], tgt: [_b.mid[0] - _n[0] * 170, 12, _b.mid[1] - _n[1] * 170] },
-  gate:     { pos: [data.gate.x - 130, 130, data.gate.z + 430], tgt: [data.gate.x, 18, data.gate.z] },
+  gate:     { pos: [data.gate.x - 210, 60, data.gate.z + 170], tgt: [data.gate.x, 6, data.gate.z - 40] },
   sea:      { pos: [_bv.mid[0] + _bv.normal[0] * 980, 340, _bv.mid[1] + _bv.normal[1] * 980],
               tgt: [_bv.mid[0] + _bv.normal[0] * 140, 26, _bv.mid[1] + _bv.normal[1] * 140] },
   crane:    { pos: [_b.mid[0] + _n[0] * 165, 52, _b.mid[1] + _n[1] * 165], tgt: [_b.mid[0], 58, _b.mid[1]] },
@@ -280,9 +280,9 @@ document.querySelectorAll('#views button').forEach((b) =>
 
 /* ------------------------------------------------------------------ layers */
 const LAYER_LABEL = {
-  cranes: '岸桥 Quay Cranes', yardcranes: '场桥 Yard Cranes', containers: '集装箱 Containers',
-  vessels: '船舶 Vessels', channels: '航道 Channels', labels: '标注 Labels', vehicles: '集卡 Trucks',
-  zones: '泊位分区 Berth Zones',
+  cranes: 'å²¸æ¡¥ Quay Cranes', yardcranes: 'åœºæ¡¥ Yard Cranes', containers: 'é›†è£…ç®± Containers',
+  vessels: 'èˆ¹èˆ¶ Vessels', channels: 'èˆªé“ Channels', labels: 'æ ‡æ³¨ Labels', vehicles: 'é›†å¡ Trucks',
+  zones: 'æ³Šä½åˆ†åŒº Berth Zones',
 };
 document.querySelectorAll('.sw').forEach((el) => {
   el.addEventListener('click', () => {
@@ -357,7 +357,7 @@ function animate() {
   sky.position.copy(camera.position);   // keep the gradient centred on the viewer
   if (layers.region) updateRegionLabels(layers.region, camera);
 
-  // LOD refresh — throttled, and only when the camera actually moved
+  // LOD refresh â€” throttled, and only when the camera actually moved
   lodTimer += dt;
   if (lodTimer > 0.22 && camera.position.distanceToSquared(lastCam) > 900) {
     lodTimer = 0;
@@ -388,13 +388,39 @@ animate();
 /* ------------------------------------------------------------------ ready */
 renderer.compile(scene, camera);
 setTimeout(() => {
-  document.getElementById('load').classList.add('hide');
+  const load = document.getElementById('load');
+  load.classList.add('hide');
+  // drop it from the DOM once the fade is over, so it cannot tint a screenshot
+  setTimeout(() => load.remove(), 900);
 }, 180);
-console.log(`[PPT] built in ${(performance.now() - t).toFixed(0)} ms · ` +
-  `${nQC} quay cranes · ${nYC} yard cranes · ${yards.total} containers · ${nTruck} trucks`);
+console.log(`[PPT] built in ${(performance.now() - t).toFixed(0)} ms Â· ` +
+  `${nQC} quay cranes Â· ${nYC} yard cranes Â· ${yards.total} containers Â· ${nTruck} trucks`);
 
 /* public handle for the future dynamic layer */
 window.PPT = {
   scene, camera, controls, renderer, data, runtime, yards, layers, goView,
   pickable: { yardGroup, craneGroup, vesselGroup },
 };
+
+/* deep link: ?view=yard|gate|crane|berth|sea|overview */
+const _qv = new URLSearchParams(location.search).get('view');
+if (_qv) setTimeout(() => {
+  const v = VIEWS[_qv];
+  if (v) {
+    camera.position.set(...v.pos);
+    controls.target.set(...v.tgt);
+    controls.update();
+  }
+  document.querySelectorAll('#views button').forEach((b) =>
+    b.classList.toggle('act', b.dataset.view === _qv));
+}, 2200);
+/* debug camera: ?cam=x,y,z,tx,ty,tz */
+const _cam = new URLSearchParams(location.search).get('cam');
+if (_cam) {
+  const [px, py, pz, tx, ty, tz] = _cam.split(',').map(Number);
+  setTimeout(() => {
+    camera.position.set(px, py, pz);
+    controls.target.set(tx, ty, tz);
+    controls.update();
+  }, 2300);
+}

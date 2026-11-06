@@ -223,9 +223,19 @@ export function buildTerminal(data, group) {
   group.add(new THREE.Mesh(merge(rails), mat(0xb9bfc4, { metalness: 0.6, roughness: 0.4 })));
 
   /* ---- roads */
+  // `data.roads` are the quay apron roads (one straight ribbon each); the
+  // named internal network (Avenue/Drive/Link) arrives as polylines in
+  // `data.mainRoads` and is flattened into the same ribbon pass.
+  const allRoads = data.roads.slice();
+  for (const r of data.mainRoads || []) {
+    for (let i = 0; i < r.pts.length - 1; i++) {
+      allRoads.push({ a: r.pts[i], b: r.pts[i + 1], width: r.width, type: 'main' });
+    }
+  }
+
   const roadGeos = [];
   const dashes = [];
-  for (const r of data.roads) {
+  for (const r of allRoads) {
     const [ax, az] = r.a, [bx, bz] = r.b;
     const dx = bx - ax, dz = bz - az;
     const len = Math.hypot(dx, dz);
@@ -250,7 +260,7 @@ export function buildTerminal(data, group) {
     new THREE.BoxGeometry(5.5, 0.6, 1.4).translate(0, 30.2, 0),
   ]);
   const masts = [];
-  for (const r of data.roads) {
+  for (const r of allRoads) {
     const dx = r.b[0] - r.a[0], dz = r.b[1] - r.a[1];
     const len = Math.hypot(dx, dz);
     if (len < 30) continue;
@@ -270,7 +280,6 @@ export function buildTerminal(data, group) {
   const gate = new THREE.Group();
   const laneTotal = (g.in_lanes + g.out_lanes) * g.lane_w;
   const halfW = laneTotal / 2;
-  const rotY = -0.20;
 
   gate.add(new THREE.Mesh(box(laneTotal + 16, 1.4, 30, 0, g.canopy_h, 30), mat(PAL.gate, { roughness: 0.6, metalness: 0.2 })));
   const cols = [];
@@ -288,7 +297,7 @@ export function buildTerminal(data, group) {
   gate.add(new THREE.Mesh(box(110, 16, 60, halfW + 90, 8, 60), mat(0x9aa1a5, { roughness: 0.75 })));
   gate.add(new THREE.Mesh(box(70, 26, 40, -halfW - 90, 13, 55), mat(0xb9c0c4, { roughness: 0.55, metalness: 0.15 })));
   gate.position.set(g.x, DECK, g.z - 40);
-  gate.rotation.y = rotY;
+  gate.rotation.y = g.rot ?? -0.20;
   group.add(gate);
 
   /* ---- terminal zones: coloured apron + berth ticks */
