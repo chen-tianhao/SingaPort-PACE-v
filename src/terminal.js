@@ -87,18 +87,36 @@ export function buildTerminal(data, group) {
   const rails = [];
   for (const y of data.yards) {
     const [cx, cz] = y.c;
-    // yard blocks are axis aligned everywhere in the data (see yards.js):
-    // w across X, l along Z. `angle` is not a footprint rotation.
+    // block local: w across X, l along Z; `angle` rotates that frame onto the
+    // block's bearing (120.7° west / 30.7° east)
+    const rad = (y.angle * Math.PI) / 180;
+    const ca = Math.cos(rad), sa = Math.sin(rad);
     const s = new THREE.BoxGeometry(y.w, 0.22, y.l);
+    if (rad) s.rotateY(rad);
     s.translate(cx, DECK + 0.11, cz);
     slabs.push(s);
     for (const off of [-y.w / 2 + 2.2, y.w / 2 - 2.2]) {
       const r = new THREE.BoxGeometry(1.4, 0.3, y.l);
-      r.translate(cx + off, DECK + 0.22, cz);
+      if (rad) r.rotateY(rad);
+      r.translate(cx + off * ca, DECK + 0.22, cz - off * sa);
       rails.push(r);
     }
   }
   group.add(new THREE.Mesh(merge(slabs), mat(PAL.yard, { roughness: 0.95 })));
+
+  /* ---- yard aprons: one concrete plate per zone, so the aisles between
+     lanes read as paving instead of the dark land plate */
+  if (data.yardZones) {
+    const ap = [];
+    for (const z of data.yardZones) {
+      const rad = (z.angle * Math.PI) / 180;
+      const g = new THREE.BoxGeometry(z.w, 0.16, z.l);
+      if (rad) g.rotateY(rad);
+      g.translate(z.c[0], DECK + 0.05, z.c[1]);
+      ap.push(g);
+    }
+    group.add(new THREE.Mesh(merge(ap), mat(0x6f7579, { roughness: 0.96 })));
+  }
   group.add(new THREE.Mesh(merge(rails), mat(0xb9bfc4, { metalness: 0.6, roughness: 0.4 })));
 
   /* ---- roads */

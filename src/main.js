@@ -208,7 +208,10 @@ document.getElementById('k-berth').textContent = data.meta.berths;
 // published berth-box total is a different figure and is reported separately
 document.getElementById('k-quay').innerHTML = data.meta.quay_chain_m.toLocaleString('en').replace(/,/g, ' ') + '<span>m</span>';
 document.getElementById('k-qc').textContent = data.meta.quay_cranes;
-document.getElementById('k-yard').textContent = data.equipment.yard_cranes.total;
+// HUD shows what the scene actually contains; the published fleet total
+// (data.equipment.yard_cranes.total) is a different, unconfirmed figure
+// and is no longer displayed here.
+document.getElementById('k-yard').textContent = nYC;
 document.getElementById('k-teu').textContent = yards.total.toLocaleString('en').replace(/,/g, ' ');
 
 const termList = document.getElementById('term-list');

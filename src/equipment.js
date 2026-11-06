@@ -139,45 +139,35 @@ export function buildQuayCranes(data, group) {
 }
 
 export function buildYardCranes(data, group) {
-  const rmgGeo = yardCraneGeometry(30, 21, 6);
-  const rtgGeo = yardCraneGeometry(24, 18, 0);
+  const rmgGeo = yardCraneGeometry(34, 21, 4);      // 32–36 m blocks (north bank, east arm)
+  const rtgGeo = yardCraneGeometry(25, 18, 0);      // 19.5 m blocks (west block)
   const ohbcGeo = ohbcGeometry();
 
   const rmg = [], rtg = [], ohbc = [];
-  const rand = rng(7);
   for (const y of data.yards) {
-    const cx = y.c[0], cz = y.c[1];
-    const n = y.crane === 'OHBC' ? 2 : 2;
+    const rad = (y.angle * Math.PI) / 180;
+    const ca = Math.cos(rad), sa = Math.sin(rad);
+    // one straddle carrier per block; long blocks get a second unit spaced
+    // along the block's own axis so it always reads as "across the stacks"
+    const n = y.l >= 210 ? 2 : 1;
     for (let i = 0; i < n; i++) {
-      // cranes are spaced along the block length (Z) and straddle its width (X)
-      const dz = (i - (n - 1) / 2) * y.l * 0.45;
-      const item = { x: cx, z: cz + dz, rot: 0 };
+      const dz = n === 1 ? 0 : (i - (n - 1) / 2) * y.l * 0.42;
+      const item = { x: y.c[0] + dz * sa, z: y.c[1] + dz * ca, rot: rad };
       if (y.crane === 'OHBC') ohbc.push(item);
       else if (y.crane === 'RMG') rmg.push(item);
       else rtg.push(item);
     }
   }
 
-  // pad out to published fleet totals with cranes parked on the quay apron
-  const mk = (list, geo, color, target, spread) => {
+  const mk = (list, geo, color) => {
     if (!list.length) return 0;
-    const out = [...list];
-    let i = 0;
-    while (out.length < target) {
-      const p = list[i % list.length];
-      out.push({ x: p.x + (rand() - 0.5) * spread, z: p.z + (rand() - 0.5) * spread, rot: p.rot });
-      i++;
-    }
-    const m = instanced(geo, mat(color, { roughness: 0.6, metalness: 0.2 }), out.length);
-    out.forEach((p, k) => setInst(m, k, p.x, 5, p.z, 1, 1, 1, p.rot));
+    const m = instanced(geo, mat(color, { roughness: 0.6, metalness: 0.2 }), list.length);
+    list.forEach((p, k) => setInst(m, k, p.x, 5, p.z, 1, 1, 1, p.rot));
     group.add(m);
-    return out.length;
+    return list.length;
   };
 
-  const nRmg = mk(rmg, rmgGeo, PAL.rmg, 84, 40);
-  const nRtg = mk(rtg, rtgGeo, PAL.rmg, 24, 40);
-  const nOhbc = mk(ohbc, ohbcGeo, 0x9ba3a8, 22, 20);
-  return nRmg + nRtg + nOhbc;
+  return mk(rmg, rmgGeo, PAL.rmg) + mk(rtg, rtgGeo, PAL.rmg) + mk(ohbc, ohbcGeo, 0x9ba3a8);
 }
 
 /* ------------------------------------------------------------------ trucks */
