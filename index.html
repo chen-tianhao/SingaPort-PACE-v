@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pasir Panjang Terminal · 3D Reconstruction (Three.js)</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><rect width=%2216%22 height=%2216%22 fill=%22%230b141c%22/><rect x=%222%22 y=%227%22 width=%2212%22 height=%222%22 fill=%22%233fa9d9%22/></svg>">
+<style>
+  :root{
+    --bg:#080c11; --panel:rgba(14,20,27,.86); --line:rgba(255,255,255,.10);
+    --txt:#e8eef4; --dim:#93a4b4; --accent:#3fa9d9; --accent2:#f0a04b;
+    --mono:"JetBrains Mono","SF Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);
+    font-family:"Inter","Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;}
+  #app{position:fixed;inset:0}
+  canvas{display:block}
+
+  .panel{position:absolute;background:var(--panel);border:1px solid var(--line);
+    backdrop-filter:blur(10px);border-radius:10px;}
+
+  /* title */
+  #title{left:18px;top:16px;padding:14px 18px 12px;min-width:330px}
+  #title h1{margin:0;font-size:16px;letter-spacing:.18em;font-weight:600}
+  #title .zh{margin-top:3px;font-size:11px;color:var(--dim);letter-spacing:.28em}
+  #title .meta{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.65;letter-spacing:.02em}
+  #title .meta b{color:var(--accent);font-weight:500}
+
+  /* stats */
+  #stats{left:18px;top:132px;padding:12px 16px;width:290px}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+  .kpi .v{font-family:var(--mono);font-size:19px;color:#fff;line-height:1.1}
+  .kpi .v span{font-size:10px;color:var(--dim);margin-left:3px}
+  .kpi .k{font-size:10px;color:var(--dim);margin-top:2px;letter-spacing:.06em}
+
+  /* layer switch */
+  #layers{right:18px;top:16px;padding:12px 14px;width:196px}
+  .ttl{font-size:10px;letter-spacing:.2em;color:var(--dim);margin-bottom:9px}
+  .sw{display:flex;align-items:center;justify-content:space-between;
+    padding:4px 0;font-size:11.5px;color:#c9d6e2;cursor:pointer;user-select:none}
+  .sw i{width:26px;height:13px;border-radius:7px;background:#2a3540;position:relative;
+    transition:.18s;flex:0 0 auto}
+  .sw i::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;
+    background:#7d8b98;top:2px;left:2px;transition:.18s}
+  .sw.on i{background:rgba(63,169,217,.32)}
+  .sw.on i::after{left:15px;background:var(--accent)}
+
+  /* terminals */
+  #terms{left:18px;top:262px;padding:10px 13px 6px;width:268px}
+  .trow{display:flex;align-items:center;gap:7px;padding:3.5px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);font-size:10.5px;color:#dbe6ef}
+  .trow:last-child{border-bottom:none}
+  .trow i{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+  .trow b{font-weight:600;flex:0 0 40px;letter-spacing:.03em}
+  .trow span{font-family:var(--mono);font-size:9px;color:#a3b6c5;flex:1;white-space:nowrap}
+  .trow em{font-family:var(--mono);font-style:normal;font-size:9px;color:#6f8496}
+
+  /* presets */
+  #views{left:18px;bottom:18px;padding:10px 12px;display:flex;gap:6px;flex-wrap:wrap;max-width:520px}
+  #views button{background:transparent;border:1px solid var(--line);color:#b9c8d6;
+    font-size:11px;padding:6px 11px;border-radius:6px;cursor:pointer;transition:.15s;
+    font-family:inherit}
+  #views button:hover{border-color:var(--accent);color:#fff;background:rgba(63,169,217,.10)}
+  #views button.act{border-color:var(--accent);color:#fff;background:rgba(63,169,217,.18)}
+
+  /* perf */
+  #perf{right:18px;bottom:18px;padding:9px 13px;font-family:var(--mono);font-size:10.5px;
+    color:var(--dim);line-height:1.7;text-align:right}
+  #perf b{color:var(--accent);font-weight:500}
+
+  /* scale bar */
+  #scale{left:50%;bottom:18px;transform:translateX(-50%);padding:6px 14px;
+    font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.1em}
+
+  /* loading */
+  #load{position:fixed;inset:0;background:#070a0e;display:flex;align-items:center;
+    justify-content:center;flex-direction:column;gap:16px;z-index:50;transition:opacity .5s}
+  #load .lb{width:220px;height:2px;background:#1b242e;overflow:hidden}
+  #load .lb i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+  #load .t{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:#8fa1b1}
+  .hide{opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<div id="load">
+  <div class="t">PASIR PANJANG TERMINAL · BUILDING SCENE</div>
+  <div class="lb"><i id="bar"></i></div>
+</div>
+
+<div id="title" class="panel">
+  <h1>PASIR PANJANG TERMINAL</h1>
+  <div class="zh">新加坡 · 巴西班让码头 · 3D 场景重建</div>
+  <div class="meta">
+    PSA Singapore Terminals · UN/LOCODE <b>SGPPT</b><br>
+    1°17.2′N 103°46.1′E — 新加坡西南海岸<br>
+    局部坐标 +X 东 / +Z 南 / 水面 Y=0
+  </div>
+</div>
+
+<div id="stats" class="panel">
+  <div class="kpis">
+    <div class="kpi"><div class="v" id="k-berth">41</div><div class="k">泊位 BERTHS</div></div>
+    <div class="kpi"><div class="v" id="k-quay">14 244<span>m</span></div><div class="k">岸线 QUAY</div></div>
+    <div class="kpi"><div class="v" id="k-qc">147</div><div class="k">岸桥 QUAY CRANES</div></div>
+    <div class="kpi"><div class="v">18.0<span>m</span></div><div class="k">最大吃水 DRAFT</div></div>
+    <div class="kpi"><div class="v" id="k-yard">0</div><div class="k">场桥 YARD CRANES</div></div>
+    <div class="kpi"><div class="v" id="k-teu">7 300</div><div class="k">场景箱量 CONTAINERS</div></div>
+  </div>
+</div>
+
+<div id="layers" class="panel">
+  <div class="ttl">图层 / LAYERS</div>
+  <div class="sw on" data-layer="cranes"><span>岸桥 Quay Cranes</span><i></i></div>
+  <div class="sw on" data-layer="yardcranes"><span>场桥 Yard Cranes</span><i></i></div>
+  <div class="sw on" data-layer="containers"><span>集装箱 Containers</span><i></i></div>
+  <div class="sw on" data-layer="vessels"><span>船舶 Vessels</span><i></i></div>
+  <div class="sw on" data-layer="channels"><span>航道 Channels</span><i></i></div>
+  <div class="sw on" data-layer="labels"><span>标注 Labels</span><i></i></div>
+  <div class="sw on" data-layer="vehicles"><span>集卡 Trucks</span><i></i></div>
+  <div class="sw on" data-layer="zones"><span>泊位分区 Berth Zones</span><i></i></div>
+</div>
+
+<div id="terms" class="panel">
+  <div class="ttl">码头 / TERMINALS · MPA 2025</div>
+  <div id="term-list"></div>
+</div>
+
+<div id="views" class="panel">
+  <button data-view="overview" class="act">全景 Overview</button>
+  <button data-view="berth">泊位 <span id="vb">P21</span></button>
+  <button data-view="yard">堆场 Yard</button>
+  <button data-view="gate">大门 Gate</button>
+  <button data-view="sea">水域 Approach</button>
+  <button data-view="crane">岸桥 Crane</button>
+</div>
+
+<div id="perf" class="panel">
+  <div><b id="fps">--</b> FPS</div>
+  <div>draw <b id="dc">--</b> · tri <b id="tri">--</b></div>
+  <div id="lod">LOD 0 / 0 / 0</div>
+</div>
+
+<div id="scale" class="panel">SCALE 1:1 · 1 UNIT = 1 METRE</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/": "./vendor/addons/"
+} }
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

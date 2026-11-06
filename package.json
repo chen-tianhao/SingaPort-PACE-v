@@ -1,0 +1,10 @@
+{
+  "name": "ppt3d-threejs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pasir Panjang Terminal 3D reconstruction — Three.js viewer",
+  "type": "module",
+  "scripts": {
+    "start": "python -m http.server 8765"
+  }
+}
