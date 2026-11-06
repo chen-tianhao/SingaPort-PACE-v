@@ -4,7 +4,7 @@ import { mat, instanced, setInst, rng, merge } from './geo.js';
 const COLORS = [0xb3402f, 0x2a5c8a, 0x2e6b4f, 0xc07a2a, 0x9aa0a6, 0xd8dcdd, 0x7a4b8f, 0x1f6f8b];
 const DECK = 5.0;
 const CELL = 500;                 // spatial chunk edge (m)
-const NEAR_GEO = new THREE.BoxGeometry(12.19, 2.59, 2.44);
+const NEAR_GEO = new THREE.BoxGeometry(2.44, 2.59, 12.19);   // 40 ft box: 12.19 m runs along the bay (Z)
 
 function hashOf(s) {
   let h = 2166136261;
@@ -12,34 +12,39 @@ function hashOf(s) {
   return h >>> 0;
 }
 
-/** One yard block, reduced to the data needed to build its three LOD tiers. */
+/**
+ * One yard block, reduced to the data needed to build its three LOD tiers.
+ *
+ * Every block in `data.yards` is 52 m across and 180 m long, and the centres
+ * sit on a uniform 60 m (X) × 188 m (Z) grid — i.e. the long axis is always Z.
+ * The `angle` field does not describe the footprint (applying it would rotate
+ * half the blocks 90° into their neighbours), so it is deliberately ignored.
+ */
 function planBlock(y) {
   const rand = rng(hashOf(y.id));
-  const ang = (-y.angle * Math.PI) / 180;
-  const ca = Math.cos(ang), sa = Math.sin(ang);
   const near = [];              // [localX, worldY, localZ, color]
   for (let r = 0; r < y.rows; r++) {
     for (let b = 0; b < y.bays; b++) {
       const stackTiers = 1 + Math.floor(rand() * y.tiers);
       for (let t = 0; t < stackTiers; t++) {
         if (rand() > y.fill + 0.26) continue;
-        const px = -y.l / 2 + 8 + b * y.bay_pitch;
-        const pz = -y.w / 2 + 5 + r * y.row_pitch;
+        const px = -y.w / 2 + 5 + r * y.row_pitch;        // rows run across the block (X)
+        const pz = -y.l / 2 + 8 + b * y.bay_pitch;        // bays run along the block (Z)
         const base = COLORS[(Math.floor(b / 5) + y.id.charCodeAt(1) + y.id.charCodeAt(2)) % COLORS.length];
         const c = rand() > 0.90 ? COLORS[(b + 3) % COLORS.length] : base;
         near.push([px, DECK + 1.55 + t * y.tier_h, pz, c]);
       }
     }
   }
-  const mid = [];               // [localX, worldY, color]
+  const mid = [];               // [localZ, worldY, color] — one slab per bay
   for (let b = 0; b < y.bays; b++) {
-    const px = -y.l / 2 + 8 + b * y.bay_pitch;
-    mid.push([px, DECK + 0.25 + (y.tiers * y.tier_h * 0.86) / 2,
+    const pz = -y.l / 2 + 8 + b * y.bay_pitch;
+    mid.push([pz, DECK + 0.25 + (y.tiers * y.tier_h * 0.86) / 2,
       COLORS[(Math.floor(b / 5) + y.id.charCodeAt(1) + y.id.charCodeAt(2)) % COLORS.length]]);
   }
   const far = { h: y.tiers * y.tier_h * 0.8, color:
     COLORS[(y.id.charCodeAt(1) + y.id.charCodeAt(2)) % COLORS.length] };
-  return { y, ang, ca, sa, near, mid, far };
+  return { y, near, mid, far };
 }
 
 /**
@@ -61,12 +66,8 @@ class YardChunk {
     this.cz = sz / plans.length;
     this.group.position.set(this.cx, 0, this.cz);
 
-    // world -> chunk local (Three.js rotation about Y: x'=x cos+z sin, z'=-x sin+z cos)
-    const local = (p, px, pz) => {
-      const wx = p.y.c[0] + px * p.ca + pz * p.sa - this.cx;
-      const wz = p.y.c[1] - px * p.sa + pz * p.ca - this.cz;
-      return [wx, wz];
-    };
+    // block local -> chunk local; blocks are axis aligned, so this is a shift
+    const local = (p, px, pz) => [p.y.c[0] + px - this.cx, p.y.c[1] + pz - this.cz];
 
     // ---------------- near: all containers of the chunk
     const nItems = [];
@@ -93,14 +94,14 @@ class YardChunk {
       if (!midGroups.has(key)) midGroups.set(key, []);
       const arr = midGroups.get(key);
       for (const it of p.mid) {
-        const [wx, wz] = local(p, it[0], 0);
+        const [wx, wz] = local(p, 0, it[0]);      // bays advance along Z
         arr.push([wx, it[1], wz, it[2]]);
       }
     }
     this.mids = [];
     for (const [key, items] of midGroups) {
       const [bp, tiers, th, rows, rp] = key.split('|').map(Number);
-      const g = new THREE.BoxGeometry(bp * 0.98, tiers * th * 0.86, rows * rp * 0.94);
+      const g = new THREE.BoxGeometry(rows * rp * 0.94, tiers * th * 0.86, bp * 0.98);
       const m = instanced(g, mat(0xffffff, { roughness: 0.9 }), Math.max(items.length, 1));
       const mc = new THREE.Color();
       items.forEach((it, i) => {
@@ -117,8 +118,7 @@ class YardChunk {
     // ---------------- far: one merged mesh of block volumes
     const geos = [];
     for (const p of plans) {
-      const g = new THREE.BoxGeometry(p.y.l * 0.97, p.far.h, p.y.w * 0.94);
-      g.rotateY(p.ang);
+      const g = new THREE.BoxGeometry(p.y.w * 0.94, p.far.h, p.y.l * 0.97);
       const [wx, wz] = local(p, 0, 0);
       g.translate(wx, DECK + 0.25 + p.far.h / 2, wz);
       const fc = new THREE.Color(p.far.color).lerp(new THREE.Color(0x6b7178), 0.42);

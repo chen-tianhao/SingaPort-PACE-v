@@ -111,5 +111,5 @@ export function buildBuoys(data, group) {
 }
 
 export function addFog(scene, color) {
-  scene.fog = new THREE.Fog(color, 3000, 15000);
+  scene.fog = new THREE.Fog(color, 4000, 22000);
 }

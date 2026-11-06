@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { PAL, mat, box, merge, ribbon, instanced, setInst, rng, pointInPoly } from './geo.js';
+import { PAL, mat, box, merge, ribbon, instanced, setInst } from './geo.js';
 
 const DECK = 5.0;
 
@@ -87,15 +87,14 @@ export function buildTerminal(data, group) {
   const rails = [];
   for (const y of data.yards) {
     const [cx, cz] = y.c;
-    const rad = (-y.angle * Math.PI) / 180;
+    // yard blocks are axis aligned everywhere in the data (see yards.js):
+    // w across X, l along Z. `angle` is not a footprint rotation.
     const s = new THREE.BoxGeometry(y.w, 0.22, y.l);
-    s.rotateY(rad);
     s.translate(cx, DECK + 0.11, cz);
     slabs.push(s);
     for (const off of [-y.w / 2 + 2.2, y.w / 2 - 2.2]) {
       const r = new THREE.BoxGeometry(1.4, 0.3, y.l);
-      r.rotateY(rad);
-      r.translate(cx + Math.cos(rad) * off, DECK + 0.22, cz - Math.sin(rad) * off);
+      r.translate(cx + off, DECK + 0.22, cz);
       rails.push(r);
     }
   }
@@ -268,61 +267,9 @@ export function buildTerminal(data, group) {
   return { labels, zones: zoneGroup };
 }
 
-/* ------------------------------------------------------------------ backdrop */
-export function buildBackdrop(data, group) {
-  const g = new THREE.Group();
-  const rot = -0.20;
-
-  // The city plate is derived from the terminal footprint instead of being
-  // hard-coded, so it always sits just north of the real land mass.
-  // (+Z is south in the local frame, so north = smaller Z.)
-  let zmin = Infinity, xmin = Infinity, xmax = -Infinity;
-  for (const p of data.land) {
-    zmin = Math.min(zmin, p[1]);
-    xmin = Math.min(xmin, p[0]);
-    xmax = Math.max(xmax, p[0]);
-  }
-  const PW = 9000, PD = 900;
-  const cx = (xmin + xmax) / 2 + 300;
-  const cz = zmin - 320;
-
-  const plate = new THREE.Mesh(new THREE.BoxGeometry(PW, 16, PD), mat(0x5e6668, { roughness: 1 }));
-  plate.position.set(cx, 4, cz);
-  plate.rotation.y = rot;
-  g.add(plate);
-
-  // city blocks: only on the city side of the terminal, never on the apron
-  const rand = rng(99);
-  const blocks = [];
-  const roofs = [];
-  for (let i = 0; i < 600 && blocks.length < 170; i++) {
-    const lx = -PW / 2 + 200 + rand() * (PW - 400);
-    const lz = -PD / 2 + 110 + rand() * (PD - 220);
-    const x = cx + lx * Math.cos(rot) + lz * Math.sin(rot);
-    const z = cz - lx * Math.sin(rot) + lz * Math.cos(rot);
-    if (z > zmin + 30) continue;                      // keep it north of the land
-    if (pointInPoly(x, z, data.land)) continue;        // never on the terminal
-    const w = 40 + rand() * 90, d = 40 + rand() * 80, h = 12 + rand() * 60;
-    blocks.push(box(w, h, d, x, 14 + h / 2, z, rot));
-    roofs.push(box(w * 0.9, 1.2, d * 0.9, x, 14 + h + 0.6, z, rot));
-  }
-  g.add(new THREE.Mesh(merge(blocks), mat(0x9aa3a8, { roughness: 0.9 })));
-  g.add(new THREE.Mesh(merge(roofs), mat(0xb0b8bc, { roughness: 0.8 })));
-
-  // mainland west of the terminal (Jurong side), also derived from the footprint
-  // distant mainland to the north-west (Jurong side), kept far away so it
-  // reads as the opposite shore rather than a slab next to the terminal
-  const west = new THREE.Mesh(new THREE.BoxGeometry(7000, 18, 3200), mat(0x3b4547, { roughness: 1 }));
-  west.position.set(xmin - 4200, 5, zmin - 900);
-  g.add(west);
-
-  group.add(g);
-  return g;
-}
-
 /* ------------------------------------------------------------------ water */
 export function buildWater(data, group) {
-  const geo = new THREE.PlaneGeometry(30000, 30000, 1, 1);
+  const geo = new THREE.PlaneGeometry(60000, 60000, 1, 1);
   geo.rotateX(-Math.PI / 2);
   const uniforms = {
     uTime: { value: 0 },

@@ -81,18 +81,6 @@ export function rng(seed) {
   };
 }
 
-/** Point-in-polygon (even-odd rule) in the local XZ plane. */
-export function pointInPoly(x, z, ring) {
-  if (!ring || ring.length < 3) return false;
-  let inside = false;
-  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const xi = ring[i][0], zi = ring[i][1];
-    const xj = ring[j][0], zj = ring[j][1];
-    if ((zi > z) !== (zj > z) && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) inside = !inside;
-  }
-  return inside;
-}
-
 export function instanced(geo, material, count) {
   const m = new THREE.InstancedMesh(geo, material, count);
   m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);

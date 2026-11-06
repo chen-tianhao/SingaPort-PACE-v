@@ -147,12 +147,11 @@ export function buildYardCranes(data, group) {
   const rand = rng(7);
   for (const y of data.yards) {
     const cx = y.c[0], cz = y.c[1];
-    const rad = (-y.angle * Math.PI) / 180;
-    const ux = Math.cos(rad), uz = -Math.sin(rad);   // local +X (block length)
     const n = y.crane === 'OHBC' ? 2 : 2;
     for (let i = 0; i < n; i++) {
-      const dx = (i - (n - 1) / 2) * y.l * 0.45;
-      const item = { x: cx + ux * dx, z: cz + uz * dx, rot: rad + Math.PI / 2 };
+      // cranes are spaced along the block length (Z) and straddle its width (X)
+      const dz = (i - (n - 1) / 2) * y.l * 0.45;
+      const item = { x: cx, z: cz + dz, rot: 0 };
       if (y.crane === 'OHBC') ohbc.push(item);
       else if (y.crane === 'RMG') rmg.push(item);
       else rtg.push(item);

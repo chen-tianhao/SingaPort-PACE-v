@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { PAL, mat } from './geo.js';
-import { buildTerminal, buildWater, buildBackdrop } from './terminal.js';
+import { buildTerminal, buildWater } from './terminal.js';
+import { buildRegionMap, updateRegionLabels } from './region.js';
 import { buildQuayCranes, buildYardCranes, buildTrucks, buildVessels } from './equipment.js';
 import { buildYards } from './yards.js';
 import { buildChannels, buildBuoys, addFog } from './water.js';
@@ -92,7 +93,9 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x8aa7bb);
 addFog(scene, 0x93aec0);
 
-const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 2, 26000);
+// near is kept generous: on a 26 km far plane a 2 m near plane wastes most of
+// the depth buffer, which shows up as z-fighting on the flat overlay layers
+const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 8, 26000);
 camera.position.set(250, 1980, 3480);
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -122,6 +125,8 @@ const sky = new THREE.Mesh(
       }`,
   })
 );
+sky.renderOrder = -2;        // painted before anything else, so distant water never loses to it
+sky.frustumCulled = false;
 scene.add(sky);
 
 /* ------------------------------------------------------------------ lights */
@@ -154,8 +159,14 @@ root.add(terminalGroup, yardGroup, craneGroup, yardCraneGroup, vesselGroup, truc
 const t = performance.now();
 
 const { labels, zones } = buildTerminal(data, terminalGroup);
-buildBackdrop(data, terminalGroup);
-loadBar.style.width = '32%';
+loadBar.style.width = '28%';
+
+/* the regional map is decorative: its absence must never break the scene */
+const region = await fetch('./data/region_coast.json')
+  .then((r) => (r.ok ? r.json() : null))
+  .catch(() => null);
+layers.region = region ? buildRegionMap(region, terminalGroup) : null;
+loadBar.style.width = '34%';
 
 const water = buildWater(data, terminalGroup);
 layers.channels = buildChannels(data, root);
@@ -340,6 +351,8 @@ function animate() {
   }
 
   controls.update();
+  sky.position.copy(camera.position);   // keep the gradient centred on the viewer
+  if (layers.region) updateRegionLabels(layers.region, camera);
 
   // LOD refresh — throttled, and only when the camera actually moved
   lodTimer += dt;
