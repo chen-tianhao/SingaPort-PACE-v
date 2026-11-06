@@ -7,6 +7,52 @@ import { buildYards } from './yards.js';
 import { buildChannels, buildBuoys, addFog } from './water.js';
 
 /* =====================================================================
+   Collapsible HUD.
+
+   Every [data-panel] folds to its header. On a phone all panels start
+   folded so the scene is not buried under chrome; the user's explicit
+   choices are remembered per panel id.
+   ===================================================================== */
+const HUD_KEY = 'ppt.hud.v1';
+const HUD_MQ = window.matchMedia('(max-width: 820px)');
+const hudStored = (() => {
+  try { return JSON.parse(localStorage.getItem(HUD_KEY) || '{}'); } catch { return {}; }
+})();
+const hudPanels = [...document.querySelectorAll('.panel[data-panel]')];
+
+function setFolded(el, on) {
+  el.classList.toggle('collapsed', on);
+  el.querySelector('.phead')?.setAttribute('aria-expanded', String(!on));
+}
+
+for (const el of hudPanels) {
+  const saved = hudStored[el.id];
+  setFolded(el, saved === undefined ? HUD_MQ.matches : !!saved);
+
+  const head = el.querySelector('.phead');
+  if (!head) continue;
+  head.setAttribute('role', 'button');
+  head.setAttribute('tabindex', '0');
+
+  const toggle = () => {
+    const on = !el.classList.contains('collapsed');
+    setFolded(el, on);
+    hudStored[el.id] = on;
+    try { localStorage.setItem(HUD_KEY, JSON.stringify(hudStored)); } catch { /* private mode */ }
+  };
+  head.addEventListener('click', toggle);
+  head.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+  });
+}
+
+// crossing the breakpoint re-applies the device default, but never
+// overrides a panel the user has folded or opened by hand
+HUD_MQ.addEventListener('change', (e) => {
+  for (const el of hudPanels) if (hudStored[el.id] === undefined) setFolded(el, e.matches);
+});
+
+/* =====================================================================
    Runtime — the hook layer for future dynamic behaviour.
    Every static object can be registered and later animated without
    touching the builder code. tick(dt) drives all registered entities.
@@ -204,10 +250,13 @@ let flight = null;
 function goView(name) {
   const v = VIEWS[name];
   if (!v) return;
+  const k = frameFactor();
+  const t1 = new THREE.Vector3(...v.tgt);
+  const p1 = new THREE.Vector3(...v.pos).sub(t1).multiplyScalar(k).add(t1);
   flight = {
     t: 0,
-    p0: camera.position.clone(), p1: new THREE.Vector3(...v.pos),
-    t0: controls.target.clone(), t1: new THREE.Vector3(...v.tgt),
+    p0: camera.position.clone(), p1,
+    t0: controls.target.clone(), t1,
   };
   document.querySelectorAll('#views button').forEach((b) =>
     b.classList.toggle('act', b.dataset.view === name));
@@ -236,11 +285,42 @@ document.querySelectorAll('.sw').forEach((el) => {
 });
 
 /* ------------------------------------------------------------------ resize */
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+/* A portrait phone keeps the vertical FOV and loses most of the site, so
+   widen the vertical FOV to hold a usable horizontal field of view. */
+const BASE_FOV = 48;
+const BASE_ASPECT = 16 / 9;
+const MAX_FOV = 72;
+
+function fitView() {
+  const aspect = window.innerWidth / window.innerHeight;
+  let fov = BASE_FOV;
+  if (aspect < BASE_ASPECT) {
+    const halfH = Math.atan(Math.tan((BASE_FOV * Math.PI) / 360) * BASE_ASPECT);
+    fov = (2 * Math.atan(Math.tan(halfH) / aspect) * 180) / Math.PI;
+  }
+  camera.fov = Math.min(fov, MAX_FOV);     // cap to avoid barrel-like distortion
+  camera.aspect = aspect;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-});
+}
+
+/* How much further back the camera has to sit to hold the same horizontal
+   coverage. 1 on a widescreen, ~2 on a tall phone. */
+function frameFactor() {
+  const aspect = window.innerWidth / window.innerHeight;
+  if (aspect >= BASE_ASPECT) return 1;
+  const tanHalfH = Math.tan((camera.fov * Math.PI) / 360) * aspect;
+  const tanBaseH = Math.tan((BASE_FOV * Math.PI) / 360) * BASE_ASPECT;
+  return Math.min(tanBaseH / tanHalfH, 1.9);
+}
+
+fitView();
+const _bootK = frameFactor();
+if (_bootK > 1) {
+  camera.position.sub(controls.target).multiplyScalar(_bootK).add(controls.target);
+  controls.update();
+}
+window.addEventListener('resize', fitView);
 
 /* ------------------------------------------------------------------ loop */
 const clock = new THREE.Clock();
