@@ -3,6 +3,83 @@ import { PAL, mat, box, merge, ribbon, instanced, setInst } from './geo.js';
 
 const DECK = 5.0;
 
+/* ------------------------------------------------------------------ paving */
+const PAVING_TILE = 24;        // metres between expansion joints
+
+/**
+ * One concrete sheet with faint panel joints, repeated across the yard.
+ * Without it every apron reads as a flat grey plate, which is what an empty
+ * stack of blocks looks like from the air.
+ */
+function pavingTexture() {
+  const S = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = S;
+  const x = c.getContext('2d');
+  x.fillStyle = '#c9ced1';
+  x.fillRect(0, 0, S, S);
+
+  let seed = 20261106;
+  const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+  for (let i = 0; i < 5200; i++) {
+    const v = 176 + Math.floor(rnd() * 58);
+    x.fillStyle = `rgba(${v},${v + 2},${v + 3},0.28)`;
+    const s = 1.5 + rnd() * 5;
+    x.fillRect(rnd() * S, rnd() * S, s, s);
+  }
+  // half-tile panel joints, then the heavier expansion joint on the tile edge
+  x.strokeStyle = 'rgba(126,133,137,0.42)';
+  x.lineWidth = 1;
+  x.beginPath();
+  x.moveTo(S / 2, 0); x.lineTo(S / 2, S);
+  x.moveTo(0, S / 2); x.lineTo(S, S / 2);
+  x.stroke();
+  x.strokeStyle = 'rgba(84,91,96,0.80)';
+  x.lineWidth = 2.4;
+  x.beginPath();
+  x.moveTo(0, 1.2); x.lineTo(S, 1.2);
+  x.moveTo(1.2, 0); x.lineTo(1.2, S);
+  x.stroke();
+
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
+let _pavingTex = null;
+function pavingMat(tint) {
+  if (!_pavingTex) _pavingTex = pavingTexture();
+  return new THREE.MeshStandardMaterial({
+    map: _pavingTex, color: tint, roughness: 0.95, metalness: 0.02,
+  });
+}
+
+/** World-space planar UVs: one joint grid across plates of any size. */
+function projectUV(geo, tile) {
+  const pos = geo.attributes.position;
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < pos.count; i++) {
+    uv.setXY(i, pos.getX(i) / tile, pos.getZ(i) / tile);
+  }
+  uv.needsUpdate = true;
+  return geo;
+}
+
+let _laneMat = null;
+function laneMat() {
+  if (!_laneMat) {
+    _laneMat = new THREE.MeshStandardMaterial({
+      color: 0x3c434a, roughness: 0.97, metalness: 0.02,
+      // the lane strips are coplanar with the apron plates; bias them towards
+      // the camera instead of stacking tenths of a metre of fake height
+      polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+    });
+  }
+  return _laneMat;
+}
+
 /* ------------------------------------------------------------------ helpers */
 function polyShape(pts) {
   const s = new THREE.Shape();
@@ -94,7 +171,7 @@ export function buildTerminal(data, group) {
     const s = new THREE.BoxGeometry(y.w, 0.22, y.l);
     if (rad) s.rotateY(rad);
     s.translate(cx, DECK + 0.11, cz);
-    slabs.push(s);
+    slabs.push(projectUV(s, PAVING_TILE));
     for (const off of [-y.w / 2 + 2.2, y.w / 2 - 2.2]) {
       const r = new THREE.BoxGeometry(1.4, 0.3, y.l);
       if (rad) r.rotateY(rad);
@@ -102,20 +179,46 @@ export function buildTerminal(data, group) {
       rails.push(r);
     }
   }
-  group.add(new THREE.Mesh(merge(slabs), mat(PAL.yard, { roughness: 0.95 })));
+  group.add(new THREE.Mesh(merge(slabs), pavingMat(0xa2a8ab)));
 
-  /* ---- yard aprons: one concrete plate per zone, so the aisles between
-     lanes read as paving instead of the dark land plate */
+  /* ---- yard aprons: one paving plate per zone, so the aisles between lanes
+     read as concrete instead of the dark land plate. Planar UVs are computed
+     in world space, so the joint grid runs continuously across every plate. */
   if (data.yardZones) {
     const ap = [];
     for (const z of data.yardZones) {
       const rad = (z.angle * Math.PI) / 180;
-      const g = new THREE.BoxGeometry(z.w, 0.16, z.l);
+      const g = new THREE.PlaneGeometry(z.w, z.l);
+      g.rotateX(-Math.PI / 2);
       if (rad) g.rotateY(rad);
-      g.translate(z.c[0], DECK + 0.05, z.c[1]);
-      ap.push(g);
+      g.translate(z.c[0], DECK + 0.12, z.c[1]);
+      ap.push(projectUV(g, PAVING_TILE));
     }
-    group.add(new THREE.Mesh(merge(ap), mat(0x6f7579, { roughness: 0.96 })));
+    group.add(new THREE.Mesh(merge(ap), pavingMat(0x797f84)));
+  }
+
+  /* ---- yard travel lanes: the asphalt strip between two container rows.
+     These are the roads the internal trucks actually use, so they follow the
+     block grid rather than the quay. */
+  if (data.yardLanes) {
+    const lg = data.yardLanes.map((r) =>
+      ribbon(r.a[0], r.a[1], r.b[0], r.b[1], r.width, DECK + 0.17));
+    group.add(new THREE.Mesh(merge(lg), laneMat()));
+  }
+
+  /* ---- terminal sheds: low service buildings along the back of the yard */
+  if (data.sheds) {
+    const shedWalls = [];
+    const shedRoofs = [];
+    for (const b of data.sheds) {
+      const rad = (b.angle * Math.PI) / 180;
+      const w = box(b.w, b.h, b.l, b.c[0], DECK + b.h / 2, b.c[1], rad);
+      const r = box(b.w * 1.04, 0.8, b.l * 1.03, b.c[0], DECK + b.h + 0.3, b.c[1], rad);
+      shedWalls.push(w);
+      shedRoofs.push(r);
+    }
+    group.add(new THREE.Mesh(merge(shedWalls), mat(0xa9aeb1, { roughness: 0.85 })));
+    group.add(new THREE.Mesh(merge(shedRoofs), mat(0x7f868b, { roughness: 0.9 })));
   }
   group.add(new THREE.Mesh(merge(rails), mat(0xb9bfc4, { metalness: 0.6, roughness: 0.4 })));
 

@@ -179,17 +179,25 @@ export function buildTrucks(data, group) {
     box(0.9, 0.9, 0.9, 0, 0.45, 3.0),        // wheels hint
     box(0.9, 0.9, 0.9, 0, 0.45, -7.4),
   ]);
-  const quayRoads = data.roads.filter((r) => r.type === 'quay');
+  // apron roads along the quay, plus the travel lanes between the container
+  // rows: the internal trucks work the yard, so most of them belong there
+  const roads = data.roads
+    .filter((r) => r.type === 'quay')
+    .map((r) => ({ ...r, spacing: 120 }))
+    .concat((data.yardLanes || []).map((r) => ({ ...r, spacing: 150 })));
+
   const list = [];
   const rand = rng(21);
   const colors = [0xb3402f, 0x2a5c8a, 0x2e6b4f, 0xc07a2a, 0x8a8f93, 0xd8dcdd];
-  quayRoads.forEach((r, ri) => {
+  roads.forEach((r, ri) => {
     const dx = r.b[0] - r.a[0], dz = r.b[1] - r.a[1];
     const len = Math.hypot(dx, dz);
-    const n = Math.floor(len / 120);
+    if (len < 40) return;
+    const n = Math.max(1, Math.floor(len / r.spacing));
+    const lane = Math.min(5, Math.max(2, (r.width ?? 20) / 2 - 3));
     for (let i = 0; i < n; i++) {
       const t = (i + 0.35 + rand() * 0.3) / n;
-      const side = rand() > 0.5 ? 5 : -5;
+      const side = (rand() > 0.5 ? 1 : -1) * (lane * (0.25 + rand() * 0.7));
       list.push({
         x: r.a[0] + dx * t + (dz / len) * side,
         z: r.a[1] + dz * t - (dx / len) * side,
