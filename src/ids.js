@@ -105,8 +105,15 @@ export function buildIds(data, groups) {
       timer = 0;
     }
   }
+  function dispose() {
+    layer.remove();
+    for (const it of items) it.el.remove();
+    items.length = 0;
+    visible = false;
+  }
+
   setVisible(false);
 
   console.log(`[PPT] id tags ready: ${items.length} (${data.yards.length} blocks)`);
-  return { element: layer, items, setVisible, update };
+  return { element: layer, items, setVisible, update, dispose };
 }

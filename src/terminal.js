@@ -399,7 +399,11 @@ export function buildTerminal(data, group) {
       allTicks.push(t);
     }
     if (geos.length) {
-      zoneGroup.add(new THREE.Mesh(merge(geos), mat(TERM_COLOR[tid] || '#ffffff', { roughness: 0.65 })));
+      const zone = new THREE.Mesh(merge(geos), mat(TERM_COLOR[tid] || '#ffffff', { roughness: 0.65 }));
+      zone.name = 'zone_' + tid;
+      zone.userData.terminal = tid;
+      zone.userData.baseColor = TERM_COLOR[tid] || '#ffffff';
+      zoneGroup.add(zone);
     }
   }
   zoneGroup.add(new THREE.Mesh(merge(allTicks), mat(0xeef4f7, { roughness: 0.55 })));
@@ -441,6 +445,8 @@ export function buildTerminal(data, group) {
     }));
     sp.position.set(b.mid[0] + b.normal[0] * 28, DECK + 17, b.mid[1] + b.normal[1] * 28);
     sp.scale.set(40, 20, 1);
+    sp.name = 'berth_' + b.id;
+    sp.userData.terminal = b.terminal;
     labels.add(sp);
   }
 
@@ -458,6 +464,7 @@ export function buildTerminal(data, group) {
     sp.position.set(t.anchor[0], DECK + 34, t.anchor[1]);
     sp.scale.set(0.086, 0.0538, 1);
     sp.name = 'terminal_' + t.id;
+    sp.userData.terminal = t.id;
     labels.add(sp);
   }
   labels.name = 'labels';

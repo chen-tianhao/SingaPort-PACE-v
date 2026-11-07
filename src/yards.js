@@ -44,19 +44,19 @@ function planBlock(y) {
     const bay = fromEnd ? y.bays - 1 - b : b;
     const pz = z0 + bay * y.bay_pitch;
     const c = rand() > 0.88 ? alt : base;
-    mid.push([pz, DECK + 0.25 + (y.tiers * y.tier_h * 0.86) / 2, c]);
+    mid.push([pz, DECK + 0.25 + (y.tiers * y.tier_h * 0.86) / 2, c, y.terminal]);
     for (let r = 0; r < y.rows; r++) {
       // a few rows sit empty even in a busy bay — gives the block texture
       if (rand() > 0.94) continue;
       const stackTiers = 2 + Math.floor(rand() * (y.tiers - 1));
       const px = x0 + r * y.row_pitch;
       for (let t = 0; t < stackTiers; t++) {
-        near.push([px, DECK + 1.55 + t * y.tier_h, pz, c]);
+        near.push([px, DECK + 1.55 + t * y.tier_h, pz, c, y.terminal]);
       }
     }
   }
 
-  const far = { h: y.tiers * y.tier_h * 0.8, color: base };
+  const far = { h: y.tiers * y.tier_h * 0.8, color: base, terminal: y.terminal };
   return { y, rad, near, mid, far };
 }
 
@@ -90,7 +90,7 @@ class YardChunk {
     const nItems = [];
     for (const p of plans) for (const it of p.near) {
       const [wx, wz] = local(p, it[0], it[2]);
-      nItems.push([wx, it[1], wz, it[3], p.rad]);
+      nItems.push([wx, it[1], wz, it[3], p.rad, p.y.terminal]);
     }
     const near = instanced(NEAR_GEO, mat(0xffffff, { roughness: 0.78 }), Math.max(nItems.length, 1));
     const col = new THREE.Color();
@@ -100,6 +100,8 @@ class YardChunk {
       near.setColorAt(i, col);
     });
     near.count = nItems.length;
+    this.nearTerms = nItems.map((it) => it[5]);
+    this.nearBase = nItems.map((it) => it[3]);
     if (near.instanceColor) near.instanceColor.needsUpdate = true;
     near.computeBoundingSphere();
     this.near = near;
@@ -112,7 +114,7 @@ class YardChunk {
       const arr = midGroups.get(key);
       for (const it of p.mid) {
         const [wx, wz] = local(p, 0, it[0]);      // bays advance along Z
-        arr.push([wx, it[1], wz, it[2], p.rad]);
+        arr.push([wx, it[1], wz, it[2], p.rad, p.y.terminal]);
       }
     }
     this.mids = [];
@@ -122,11 +124,15 @@ class YardChunk {
       const g = new THREE.BoxGeometry(rows * rp * 0.94, tiers * th * 0.86, bp * 0.98);
       const m = instanced(g, mat(0xffffff, { roughness: 0.9 }), Math.max(items.length, 1));
       const mc = new THREE.Color();
+      const baseHex = [];
       items.forEach((it, i) => {
         setInst(m, i, it[0], it[1], it[2], 1, 1, 1, it[4]);
         mc.setHex(it[3]).lerp(new THREE.Color(0x6b7178), 0.28);
+        baseHex.push(mc.getHex());
         m.setColorAt(i, mc);
       });
+      m.userData.term = items.map((it) => it[5]);
+      m.userData.baseHex = baseHex;
       m.count = items.length;
       if (m.instanceColor) m.instanceColor.needsUpdate = true;
       m.computeBoundingSphere();
@@ -135,6 +141,8 @@ class YardChunk {
 
     // ---------------- far: one merged mesh of block volumes
     const geos = [];
+    this.farRanges = [];
+    let farOffset = 0;
     for (const p of plans) {
       const g = new THREE.BoxGeometry(p.y.w * 0.94, p.far.h, p.y.l * 0.97);
       if (p.rad) g.rotateY(p.rad);
@@ -146,11 +154,54 @@ class YardChunk {
       for (let i = 0; i < n; i++) { arr[i * 3] = fc.r; arr[i * 3 + 1] = fc.g; arr[i * 3 + 2] = fc.b; }
       g.setAttribute('color', new THREE.BufferAttribute(arr, 3));
       geos.push(g);
+      this.farRanges.push({
+        start: farOffset, count: n, term: p.far.terminal, base: arr.slice(),
+      });
+      farOffset += n;
     }
     this.far = new THREE.Mesh(merge(geos), mat(0xffffff, { roughness: 1, vertexColors: true }));
 
     this.group.add(this.near, ...this.mids, this.far);
     this.level = -1;
+  }
+
+  setTerminal(tid, off) {
+    const grey = new THREE.Color(0x8d9296);
+    const c = new THREE.Color();
+    let touched = false;
+    for (let i = 0; i < this.nearTerms.length; i++) {
+      if (this.nearTerms[i] !== tid) continue;
+      c.setHex(off ? 0x8d9296 : this.nearBase[i]);
+      this.near.setColorAt(i, c);
+      touched = true;
+    }
+    if (touched && this.near.instanceColor) this.near.instanceColor.needsUpdate = true;
+    for (const m of this.mids) {
+      const terms = m.userData.term || [];
+      let hit = false;
+      for (let i = 0; i < terms.length; i++) {
+        if (terms[i] !== tid) continue;
+        c.setHex(off ? 0x8d9296 : m.userData.baseHex[i]);
+        m.setColorAt(i, c);
+        hit = true;
+      }
+      if (hit && m.instanceColor) m.instanceColor.needsUpdate = true;
+    }
+    let farHit = false;
+    const attr = this.far.geometry.getAttribute('color');
+    for (const r of this.farRanges) {
+      if (r.term !== tid) continue;
+      for (let i = 0; i < r.count; i++) {
+        const k = (r.start + i) * 3;
+        if (off) {
+          attr.array[k] = grey.r; attr.array[k + 1] = grey.g; attr.array[k + 2] = grey.b;
+        } else {
+          attr.array[k] = r.base[i * 3]; attr.array[k + 1] = r.base[i * 3 + 1]; attr.array[k + 2] = r.base[i * 3 + 2];
+        }
+      }
+      farHit = true;
+    }
+    if (farHit) attr.needsUpdate = true;
   }
 
   setLevel(l) {
@@ -207,5 +258,8 @@ export function buildYards(data, group, opts = {}) {
   }
   update(new THREE.Vector3(3000, 800, 4000));
 
-  return { blocks, chunks, total, update, group };
+  return {
+    blocks, chunks, total, update, group,
+    setTerminal(tid, off) { for (const c of chunks) c.setTerminal(tid, off); },
+  };
 }

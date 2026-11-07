@@ -58,8 +58,8 @@ npx serve .
 | 场桥 | **409 台** | 依据 z20 卫星抽样：西块/北岸 RTG 约 1 台/块，连接段 C 区 1 台/块，东臂 D 区 1/2 块（255 RTG + 154 RMG）；每台停在块端而非块中心，跨距 25 / 34 m |
 | 建筑/仓库 | 0 | PPT2 靠 PPAT 的 U 形建筑经 Google 标签核实是 **Multi-Level Automotive Yard (MAY)**，属于 PPAT 停车场，已删除并复原其四周 5 块箱区 |
 | 卫星底图 | 1 张 4096×3218 | Google z18 影像按模型坐标重采样，图层面板「卫星底图 Satellite」开关，用于逐块比对 |
-| 3D 资产 | 8 个 GLB / 34 MB | QuayCrane、YardCrane、PortAGV_Yellow + 5 艘集装箱船，复制在 assets/models/；替换对应程序化几何，加载失败自动回退 |
-| 编号 | 660 箱区 / 410 场桥 / 147 岸桥 / 719 集卡 | 箱区 `PPT1-BLK001`、场桥 `PPT1-BLK001-YC1`、岸桥 `PPT1-QC01`、集卡 `PM-0001`；图层面板「编号 IDs」默认关闭，打开后按相机距离与屏幕避让显示 |
+| 3D 资产 | 8 个 GLB / 34 MB | QuayCrane、YardCrane、PortAGV_Yellow + 5 艘集装箱船，复制在 assets/models/；图层「自定义模型」默认关闭，打开才加载并替换，加载失败自动回退 |
+| 编号 | 656 箱区 / 409 场桥 / 147 岸桥 / 719 集卡 | 箱区 `PPT1-BLK001`、场桥 `PPT1-BLK001-YC1`、岸桥 `PPT1-QC01`、集卡 `PM-0001`；图层面板「编号 IDs」默认关闭，打开后按相机距离与屏幕避让显示 |
 | 船舶 | 12 | 400 m ULCV、Neo-Panamax、Feeder、PCTC，全部停在水侧（泊位法线方向） |
 | 航道 | 4 条 | West Keppel / Jurong / Sinki / Pasir Panjang Sector 1；岸边采样点 0 个落入陆域 |
 | 大门 | — | 22 条车道 + 雨棚 + PPEIS 查验厅 + 行政楼；位于 OSM **Gate 4（103.7768E / 1.2834N）**，接入 Terminal Avenue 2/3，门前清出 140 m 半径的广场 |
@@ -365,5 +365,15 @@ E:\nus_code_git\3DModelLibraries\TransferToGLB\PortGLB 的 GLB 资产可用：GL
 - 加载走 src/assets.js + vendor/addons/loaders/GLTFLoader.js，GLB 加载失败时自动回退到原程序化几何；
 - 场景三角面约 **17.7M**（原 ~3.7M），headless SwiftShader 约 10 FPS，真实 GPU 会高很多；
 - 资产总大小 **34 MB**（assets/models/）。
+
+现状：**656 箱区 / 409 场桥 / 152 415 箱 / 41 泊位**。
+
+---
+
+## 18. 2026-11-07 自定义模型 / 码头显示开关
+
+- 图层面板新增「自定义模型 Custom Models」，**默认关闭**：关闭时使用原程序化几何（约 367k tri），打开时懒加载 8 个 GLB（34 MB，约 16.5M tri）并重建岸桥/场桥/集卡/船舶；再次关闭立即回退，资产已缓存，不重复下载。
+- 码头面板每一行（PPT1–PPT6）新增开关，**默认开启**：关闭后该码头的彩色岸线压条、泊位标签、岸桥、场桥、箱区/集装箱全部转灰，泊位上的船隐藏；重新打开恢复原色。
+- 箱区灰显直接重写 instanceColor / 顶点色，不重建几何；GLB 岸桥/场桥按码头分组实例化并克隆材质，关闭时切灰色材质，打开时恢复原贴图。
 
 现状：**656 箱区 / 409 场桥 / 152 415 箱 / 41 泊位**。

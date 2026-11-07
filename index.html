@@ -81,6 +81,10 @@
     border-bottom:1px solid rgba(255,255,255,.05);font-size:10.5px;color:#dbe6ef}
   .trow:last-child{border-bottom:none}
   .trow i{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+  .trow .tsw{margin-left:auto;width:24px;height:13px;border-radius:7px;background:#24303a;position:relative;cursor:pointer;flex:0 0 auto}
+  .trow .tsw i{position:absolute;top:2px;left:2px;width:9px;height:9px;border-radius:50%;background:#7b8794;transition:.16s;width:9px;height:9px}
+  .trow .tsw.on{background:rgba(63,169,217,.55)}
+  .trow .tsw.on i{left:13px;background:var(--accent)}
   .trow b{font-weight:600;flex:0 0 40px;letter-spacing:.03em}
   .trow span{font-family:var(--mono);font-size:9px;color:#a3b6c5;flex:1;white-space:nowrap}
   .trow em{font-family:var(--mono);font-style:normal;font-size:9px;color:#6f8496}
@@ -202,6 +206,7 @@
   <div id="layers" class="panel" data-panel>
     <div class="phead"><span class="ttl">图层 / LAYERS</span><i class="chev"></i></div>
     <div class="pbody">
+      <div class="sw" data-layer="custom"><span>自定义模型 Custom Models</span><i></i></div>
       <div class="sw on" data-layer="cranes"><span>岸桥 Quay Cranes</span><i></i></div>
       <div class="sw on" data-layer="yardcranes"><span>场桥 Yard Cranes</span><i></i></div>
       <div class="sw on" data-layer="containers"><span>集装箱 Containers</span><i></i></div>

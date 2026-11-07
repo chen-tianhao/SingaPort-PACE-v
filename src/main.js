@@ -145,11 +145,15 @@ const loadBar = document.getElementById('bar');
 const data = await fetch('./data/ppt_terminal.json').then((r) => r.json());
 loadBar.style.width = '18%';
 
-/* optional high-detail PSA assets; procedural geometry is the fallback */
-const assets = await loadPortAssets().catch((e) => {
-  console.warn('[PPT] port assets unavailable, using procedural geometry', e);
-  return null;
-});
+/* optional high-detail PSA assets; loaded lazily by the 自定义模型 switch */
+let assets = null;
+let customOn = false;
+let idLayer = null;
+let idsOn = false;
+let nQC = 0;
+let nYC = 0;
+let nTruck = 0;
+let vesselList = [];
 loadBar.style.width = '26%';
 
 const runtime = new Runtime();
@@ -211,12 +215,12 @@ loadBar.style.width = '46%';
 const yards = buildYards(data, yardGroup);
 loadBar.style.width = '68%';
 
-const nQC = buildQuayCranes(data, craneGroup, assets);
-const nYC = buildYardCranes(data, yardCraneGroup, assets);
-const nTruck = buildTrucks(data, truckGroup, assets);
+nQC = buildQuayCranes(data, craneGroup, assets);
+nYC = buildYardCranes(data, yardCraneGroup, assets);
+nTruck = buildTrucks(data, truckGroup, assets);
 loadBar.style.width = '86%';
 
-const vessels = buildVessels(data, vesselGroup, assets);
+vesselList = buildVessels(data, vesselGroup, assets);
 loadBar.style.width = '96%';
 
 /* ------------------------------------------------------------------ entity registry */
@@ -228,9 +232,90 @@ layers.containers = yardGroup;
 layers.vessels = vesselGroup;
 layers.vehicles = truckGroup;
 
+/* ---------------------------------------------------------- terminal on/off */
+const termOff = new Set();
+const GREY = new THREE.Color(0x8d9296);
+
+function setCraneGrey(entries, tid, off) {
+  for (const e of entries || []) {
+    if (e.term !== tid) continue;
+    const m = e.mesh.material;
+    if (off) {
+      m.map = null; m.emissiveMap = null;
+      m.color.setHex(0xb6bbbf); m.emissive.setHex(0x3a3e42);
+    } else {
+      m.map = e.baseMap; m.emissiveMap = e.baseEmissiveMap;
+      m.color.setHex(e.baseColor); m.emissive.setHex(e.baseEmissive);
+    }
+    m.needsUpdate = true;
+  }
+}
+
+function setTerminalOff(tid, off) {
+  if (off) termOff.add(tid); else termOff.delete(tid);
+  for (const z of zones.children) {
+    if (z.userData.terminal !== tid) continue;
+    z.material.color.set(off ? GREY : z.userData.baseColor);
+  }
+  for (const sp of labels.children) {
+    if (sp.userData.terminal !== tid) continue;
+    sp.material.color.set(off ? GREY : 0xffffff);
+  }
+  for (const s of vesselGroup.children) {
+    if (s.userData.terminal === tid) s.visible = !off;
+  }
+  setCraneGrey(craneGroup.userData.quayCraneMeshes, tid, off);
+  setCraneGrey(yardCraneGroup.userData.yardCraneMeshes, tid, off);
+  yards.setTerminal(tid, off);
+}
+
+function applyAllTerminals() {
+  for (const t of data.terminals) {
+    if (!t.id.startsWith('PPT')) continue;
+    setTerminalOff(t.id, termOff.has(t.id));
+  }
+}
+
+function rebuildEquipment(useAssets) {
+  for (const g of [craneGroup, yardCraneGroup, truckGroup, vesselGroup]) {
+    g.clear();
+    g.userData = {};
+  }
+  nQC = buildQuayCranes(data, craneGroup, useAssets);
+  nYC = buildYardCranes(data, yardCraneGroup, useAssets);
+  nTruck = buildTrucks(data, truckGroup, useAssets);
+  vesselList = buildVessels(data, vesselGroup, useAssets);
+  applyAllTerminals();
+  if (idLayer) {
+    idLayer.dispose();
+    idLayer = buildIds(data, { cranes: craneGroup, yardcranes: yardCraneGroup, trucks: truckGroup });
+    idLayer.setVisible(idsOn);
+  }
+}
+
+async function setCustom(on) {
+  if (on && !assets) {
+    const load = document.getElementById('load');
+    const bar = document.getElementById('bar');
+    if (load) { load.style.display = 'flex'; load.classList.remove('hide'); }
+    if (bar) bar.style.width = '20%';
+    try {
+      assets = await loadPortAssets((p) => {
+        if (bar) bar.style.width = `${20 + p * 70}%`;
+      });
+    } catch (e) {
+      console.warn('[PPT] port assets unavailable, keeping procedural geometry', e);
+      assets = null;
+    }
+    if (load) load.style.display = 'none';
+  }
+  customOn = on;
+  rebuildEquipment(on ? assets : null);
+}
+
 runtime.register('yard', yardGroup, { blocks: yards.blocks.length });
 runtime.register('cranes', craneGroup, { count: nQC });
-for (const v of vessels) {
+for (const v of vesselList) {
   const obj = vesselGroup.children.find((c) => c.name === 'vessel_' + v.id);
   if (obj) runtime.register('vessel_' + v.id, obj, v);
 }
@@ -251,11 +336,22 @@ document.getElementById('k-teu').textContent = yards.total.toLocaleString('en').
 
 const termList = document.getElementById('term-list');
 if (termList && data.terminals) {
-  termList.innerHTML = data.terminals.map((t) => `
+  termList.innerHTML = data.terminals.map((t) => {
+    const sw = t.id.startsWith('PPT')
+      ? `<div class="tsw on" data-term="${t.id}" title="${t.id} 显示/隐藏"><i></i></div>` : '';
+    return `
     <div class="trow">
       <i style="background:${t.color}"></i><b>${t.id}</b>
-      <span>${t.berth_range}</span><em>${t.n}p · ${t.quay} m</em>
-    </div>`).join('');
+      <span>${t.berth_range}</span><em>${t.n}p · ${t.quay} m</em>${sw}
+    </div>`;
+  }).join('');
+  termList.addEventListener('click', (e) => {
+    const sw = e.target.closest('.tsw');
+    if (!sw) return;
+    const on = !sw.classList.contains('on');
+    sw.classList.toggle('on', on);
+    setTerminalOff(sw.dataset.term, !on);
+  });
 }
 
 const perfFps = document.getElementById('fps');
@@ -318,18 +414,28 @@ const LAYER_LABEL = {
   cranes: '岸桥 Quay Cranes', yardcranes: '场桥 Yard Cranes', containers: '集装箱 Containers',
   vessels: '船舶 Vessels', channels: '航道 Channels', labels: '标注 Labels', vehicles: '集卡 Trucks',
   zones: '泊位分区 Berth Zones', satellite: '卫星底图 Satellite', ids: '编号 IDs',
+  custom: '自定义模型 Custom Models',
 };
-let idLayer = null;
 document.querySelectorAll('.sw').forEach((el) => {
   el.addEventListener('click', () => {
     const k = el.dataset.layer;
     const on = !el.classList.contains('on');
     el.classList.toggle('on', on);
     if (k === 'ids') {
+      idsOn = on;
       if (!idLayer) {
         idLayer = buildIds(data, { cranes: craneGroup, yardcranes: yardCraneGroup, trucks: truckGroup });
       }
       idLayer.setVisible(on);
+      return;
+    }
+    if (k === 'custom') {
+      setCustom(on).then(() => {
+        if (on && !assets) el.classList.remove('on');
+      }).catch((e) => {
+        console.warn('[PPT] custom model toggle failed', e);
+        el.classList.remove('on');
+      });
       return;
     }
     const target = layers[k];

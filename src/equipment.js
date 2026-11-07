@@ -174,18 +174,32 @@ export function buildQuayCranes(data, group, assets = null) {
 
   if (assets && assets.quayCrane && assets.quayCrane.length) {
     // the GLB portal sits deeper than the procedural one; pull the whole crane
-    // (and its ID label) 22 m toward the water
+    // (and its ID label) 32 m toward the water
     placements.forEach((p) => {
       p.x += Math.sin(p.rot) * 32;
       p.z += Math.cos(p.rot) * 32;
     });
     group.userData.quayCranes = placements;
-    for (const { geo, mat: material } of assets.quayCrane) {
-      const m = new THREE.InstancedMesh(geo, material, placements.length);
-      m.frustumCulled = false;
-      placements.forEach((p, i) => setInst(m, i, p.x, 5, p.z, 1, 1, 1, p.rot));
-      m.instanceMatrix.needsUpdate = true;
-      group.add(m);
+    group.userData.quayCraneMeshes = [];
+    const byTerm = new Map();
+    for (const p of placements) {
+      if (!byTerm.has(p.terminal)) byTerm.set(p.terminal, []);
+      byTerm.get(p.terminal).push(p);
+    }
+    for (const [tid, list] of byTerm) {
+      for (const { geo, mat: protoMat } of assets.quayCrane) {
+        const material = protoMat.clone();
+        const m = new THREE.InstancedMesh(geo, material, list.length);
+        m.frustumCulled = false;
+        list.forEach((p, i) => setInst(m, i, p.x, 5, p.z, 1, 1, 1, p.rot));
+        m.instanceMatrix.needsUpdate = true;
+        group.add(m);
+        group.userData.quayCraneMeshes.push({
+          mesh: m, term: tid,
+          baseMap: material.map, baseColor: material.color.getHex(),
+          baseEmissiveMap: material.emissiveMap, baseEmissive: material.emissive.getHex(),
+        });
+      }
     }
     return placements.length;
   }
@@ -245,18 +259,32 @@ export function buildYardCranes(data, group, assets = null) {
   }
 
   if (assets && assets.yardCrane && assets.yardCrane.length) {
+    group.userData.yardCraneMeshes = [];
     const buildGLB = (list, heightScale) => {
       if (!list.length) return 0;
-      for (const { geo, mat: material } of assets.yardCrane) {
-        const m = new THREE.InstancedMesh(geo, material, list.length);
-        m.frustumCulled = false;
-        list.forEach((p, k) => {
-          // the GLB rail gauge is 32.4 m; stretch it to the block width + 3 m
-          const sx = Math.max(0.55, ((p.span || 30) + 11) / 49.1);
-          setInst(m, k, p.x, 5, p.z, sx, heightScale, heightScale, p.rot);
-        });
-        m.instanceMatrix.needsUpdate = true;
-        group.add(m);
+      const byTerm = new Map();
+      for (const p of list) {
+        if (!byTerm.has(p.terminal)) byTerm.set(p.terminal, []);
+        byTerm.get(p.terminal).push(p);
+      }
+      for (const [tid, items] of byTerm) {
+        for (const { geo, mat: protoMat } of assets.yardCrane) {
+          const material = protoMat.clone();
+          const m = new THREE.InstancedMesh(geo, material, items.length);
+          m.frustumCulled = false;
+          items.forEach((p, k) => {
+            // the GLB span runs 49.1 m after the 90° turn; fit it to the block + 11 m
+            const sx = Math.max(0.55, ((p.span || 30) + 11) / 49.1);
+            setInst(m, k, p.x, 5, p.z, sx, heightScale, heightScale, p.rot);
+          });
+          m.instanceMatrix.needsUpdate = true;
+          group.add(m);
+          group.userData.yardCraneMeshes.push({
+            mesh: m, term: tid,
+            baseMap: material.map, baseColor: material.color.getHex(),
+            baseEmissiveMap: material.emissiveMap, baseEmissive: material.emissive.getHex(),
+          });
+        }
       }
       return list.length;
     };
@@ -549,6 +577,7 @@ export function buildVessels(data, group, assets = null) {
       b.mid[1] + b.normal[1] * (beam / 2 + 26));
     ship.rotation.y = rot;
     ship.name = 'vessel_' + v.id;
+    ship.userData.terminal = b.terminal;
     group.add(ship);
     out.push(v);
   }
