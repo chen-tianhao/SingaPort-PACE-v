@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { PAL, mat } from './geo.js';
 import { buildTerminal, buildWater } from './terminal.js';
 import { buildRegionMap, updateRegionLabels } from './region.js';
+import { buildIds } from './ids.js';
 import { buildQuayCranes, buildYardCranes, buildTrucks, buildVessels } from './equipment.js';
 import { buildYards } from './yards.js';
 import { buildChannels, buildBuoys, addFog } from './water.js';
@@ -308,13 +309,21 @@ document.querySelectorAll('#views button').forEach((b) =>
 const LAYER_LABEL = {
   cranes: '岸桥 Quay Cranes', yardcranes: '场桥 Yard Cranes', containers: '集装箱 Containers',
   vessels: '船舶 Vessels', channels: '航道 Channels', labels: '标注 Labels', vehicles: '集卡 Trucks',
-  zones: '泊位分区 Berth Zones', satellite: '卫星底图 Satellite',
+  zones: '泊位分区 Berth Zones', satellite: '卫星底图 Satellite', ids: '编号 IDs',
 };
+let idLayer = null;
 document.querySelectorAll('.sw').forEach((el) => {
   el.addEventListener('click', () => {
     const k = el.dataset.layer;
     const on = !el.classList.contains('on');
     el.classList.toggle('on', on);
+    if (k === 'ids') {
+      if (!idLayer) {
+        idLayer = buildIds(data, { cranes: craneGroup, yardcranes: yardCraneGroup, trucks: truckGroup });
+      }
+      idLayer.setVisible(on);
+      return;
+    }
     const target = layers[k];
     if (target) target.visible = on;
     if (k === 'channels') {
@@ -398,6 +407,7 @@ function animate() {
 
   water.uniforms.uTime.value += dt;
   runtime.tick(dt);
+  if (idLayer) idLayer.update(camera.position, camera, dt);
   renderer.render(scene, camera);
 
   frames++; acc += dt;

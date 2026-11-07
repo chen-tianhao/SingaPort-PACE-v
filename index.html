@@ -144,6 +144,12 @@
 
     #scale{display:none}                  /* no room next to the preset bar */
   }
+  /* optional id tags: plain DOM labels projected over the 3D scene */
+  #id-layer{position:fixed;inset:0;pointer-events:none;z-index:6;display:none;overflow:hidden}
+  .idtag{position:absolute;transform:translate(-50%,-50%);display:none;white-space:nowrap;
+    font:10px/1.15 ui-monospace,Consolas,"Courier New",monospace;letter-spacing:.02em;
+    color:#fff;background:rgba(8,12,17,.86);border:1px solid rgba(255,255,255,.35);
+    border-radius:3px;padding:1px 4px;text-shadow:0 1px 1px rgba(0,0,0,.25)}
 </style>
 </head>
 <body>
@@ -206,6 +212,7 @@
       <div class="sw on" data-layer="zones"><span>泊位分区 Berth Zones</span><i></i></div>
       <div class="sw on" data-layer="region"><span>区域底图 Region Map</span><i></i></div>
       <div class="sw" data-layer="satellite"><span>卫星底图 Satellite</span><i></i></div>
+      <div class="sw" data-layer="ids"><span>编号 IDs</span><i></i></div>
     </div>
   </div>
 

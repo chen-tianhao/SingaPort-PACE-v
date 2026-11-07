@@ -104,6 +104,7 @@ export function buildQuayCranes(data, group) {
   for (const t of data.terminals) {
     const list = berths.filter((b) => b.terminal === t.id);
     if (!list.length || !t.qc) continue;
+    let qn = 0;
 
     const groups = [];
     for (const b of list) {
@@ -164,6 +165,8 @@ export function buildQuayCranes(data, group) {
           z: z - nz * setback,
           rot: Math.atan2(nx, nz),
           mega: b.depth >= 16,
+          terminal: t.id,
+          code: `${t.id}-QC${String(++qn).padStart(2, '0')}`,
         });
       }
     });
@@ -191,6 +194,7 @@ export function buildQuayCranes(data, group) {
   accent.forEach((p, i) => setInst(am, i, p.x, 5 + (p.mega ? 58.4 : 50.4), p.z, 1, 1, 1, p.rot));
   group.add(am);
 
+  group.userData.quayCranes = placements;
   return placements.length;
 }
 
@@ -208,7 +212,14 @@ export function buildYardCranes(data, group) {
     const rad = (y.angle * Math.PI) / 180;
     const sa = Math.sin(rad), ca = Math.cos(rad);
     const off = (y.yc_t ?? -0.5) * y.l / 2;
-    const item = { x: y.c[0] + off * sa, z: y.c[1] + off * ca, rot: rad };
+    const item = {
+      x: y.c[0] + off * sa,
+      z: y.c[1] + off * ca,
+      rot: rad,
+      code: `${y.code || y.id}-YC1`,
+      block: y.code || y.id,
+      terminal: y.terminal || 'PPT?',
+    };
     if (y.crane === 'OHBC') ohbc.push(item);
     else if (y.crane === 'RMG') rmg.push(item);
     else rtg.push(item);
@@ -222,6 +233,7 @@ export function buildYardCranes(data, group) {
     return list.length;
   };
 
+  group.userData.yardCranes = [...rmg, ...rtg, ...ohbc];
   return mk(rmg, rmgGeo, PAL.rmg) + mk(rtg, rtgGeo, PAL.rmg) + mk(ohbc, ohbcGeo, 0x9ba3a8);
 }
 
@@ -308,6 +320,16 @@ export function buildTrucks(data, group) {
   const list = [];
   const rand = rng(21);
   const colors = [0xb3402f, 0x2a5c8a, 0x2e6b4f, 0xc07a2a, 0x8a8f93, 0xd8dcdd];
+  // trucks pick the terminal whose yard block is nearest; the tag background
+  // then follows that terminal's quay colour
+  const termOf = (x, z) => {
+    let best = 'PPT?', bd = 1e9;
+    for (const y of data.yards) {
+      const d = (y.c[0] - x) * (y.c[0] - x) + (y.c[1] - z) * (y.c[1] - z);
+      if (d < bd) { bd = d; best = y.terminal || 'PPT?'; }
+    }
+    return best;
+  };
   roads.forEach((r, ri) => {
     const dx = r.b[0] - r.a[0], dz = r.b[1] - r.a[1];
     const len = Math.hypot(dx, dz);
@@ -336,7 +358,12 @@ export function buildTrucks(data, group) {
       // a yard lane through an empty area (PPAT, cleared apron) is not a
       // working aisle any more: no trucks there
       if (r.kind === 'lane' && nearestYardDist(x, z, data.yards) > 22) continue;
-      list.push({ x, z, rot, color: colors[(ri + i) % colors.length] });
+      list.push({
+        x, z, rot,
+        color: colors[(ri + i) % colors.length],
+        code: `PM-${String(list.length + 1).padStart(4, '0')}`,
+        terminal: termOf(x, z),
+      });
     }
   });
   const m = instanced(geo, mat(0xffffff, { roughness: 0.7 }), list.length);
@@ -346,6 +373,7 @@ export function buildTrucks(data, group) {
   });
   m.instanceColor.needsUpdate = true;
   group.add(m);
+  group.userData.trucks = list;
   return list.length;
 }
 
