@@ -123,6 +123,59 @@ export function buildTerminal(data, group) {
     group.add(extrudeSlab(data.east, DECK, 11, mat(PAL.land, { roughness: 1 })));
   }
 
+  /* ---- quay apron
+     The land polygon stops short of the OSM quay chain in places (up to
+     ~45 m on the east arm).  This ribbon fills the gap and forms the quay
+     wall, so the apron roads, cranes and first yard row sit on deck. */
+  if (data.quay_chains && data.quay_chains.length) {
+    const qp = data.quay_chains[0].pts;
+    const segN = [];
+    for (let i = 0; i < qp.length - 1; i++) {
+      const mx = (qp[i][0] + qp[i + 1][0]) / 2;
+      const mz = (qp[i][1] + qp[i + 1][1]) / 2;
+      let best = data.berths[0], bd = Infinity;
+      for (const b of data.berths) {
+        const d = Math.hypot(b.mid[0] - mx, b.mid[1] - mz);
+        if (d < bd) { bd = d; best = b; }
+      }
+      segN.push(best.normal);
+    }
+    const inland = [];
+    for (let i = 0; i < qp.length; i++) {
+      const ns = [];
+      if (i > 0) ns.push(segN[i - 1]);
+      if (i < segN.length) ns.push(segN[i]);
+      let nx = ns.reduce((s, n) => s + n[0], 0) / ns.length;
+      let nz = ns.reduce((s, n) => s + n[1], 0) / ns.length;
+      const L = Math.hypot(nx, nz) || 1;
+      nx /= L; nz /= L;
+      const c = Math.max(0.35, Math.abs(nx * ns[0][0] + nz * ns[0][1]));
+      const sc = 1 / c;
+      inland.push([qp[i][0] - nx * 180 * sc, qp[i][1] - nz * 180 * sc]);
+    }
+    const pos = [];
+    const quad = (a, b, c, d) => {
+      pos.push(...a, ...b, ...c, ...a, ...c, ...d);
+    };
+    const TOP = DECK + 0.01, BOT = DECK - 6;
+    for (let i = 0; i < qp.length - 1; i++) {
+      const a = qp[i], b = qp[i + 1], ai = inland[i], bi = inland[i + 1];
+      const aT = [a[0], TOP, a[1]], bT = [b[0], TOP, b[1]];
+      const aiT = [ai[0], TOP, ai[1]], biT = [bi[0], TOP, bi[1]];
+      const aB = [a[0], BOT, a[1]], bB = [b[0], BOT, b[1]];
+      const aiB = [ai[0], BOT, ai[1]], biB = [bi[0], BOT, bi[1]];
+      quad(aT, bT, biT, aiT);          // top
+      quad(aT, bT, bB, aB);            // quay wall
+      quad(aiT, biT, biB, aiB);        // inland wall
+      if (i === 0) quad(aT, aB, aiB, aiT);
+      if (i === qp.length - 2) quad(bT, biT, biB, bB);
+    }
+    const ag = new THREE.BufferGeometry();
+    ag.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    ag.computeVertexNormals();
+    group.add(new THREE.Mesh(ag, mat(PAL.land, { roughness: 1, side: THREE.DoubleSide })));
+  }
+
   /* ---- quay edge: coping, fenders, bollards */
   const coping = [];
   const fenders = [];
@@ -267,8 +320,24 @@ export function buildTerminal(data, group) {
     const n = Math.max(1, Math.floor(len / 220));
     for (let i = 0; i < n; i++) {
       const t = (i + 0.5) / n;
-      masts.push([r.a[0] + dx * t + (dz / len) * (r.width / 2 + 4),
-                  r.a[1] + dz * t - (dx / len) * (r.width / 2 + 4)]);
+      const px = r.a[0] + dx * t;
+      const pz = r.a[1] + dz * t;
+      let ox, oz;
+      if (r.type === 'quay') {
+        // put the mast on the seaward verge (between the road and the quay),
+        // never on the yard side where it could stand inside a block
+        let best = data.berths[0], bd = Infinity;
+        for (const b of data.berths) {
+          const d = Math.hypot(b.mid[0] - px, b.mid[1] - pz);
+          if (d < bd) { bd = d; best = b; }
+        }
+        ox = best.normal[0] * (r.width / 2 + 3);
+        oz = best.normal[1] * (r.width / 2 + 3);
+      } else {
+        ox = (dz / len) * (r.width / 2 + 4);
+        oz = -(dx / len) * (r.width / 2 + 4);
+      }
+      masts.push([px + ox, pz + oz]);
     }
   }
   const mm = instanced(mastGeo, mat(0x8d9499, { metalness: 0.4 }), masts.length);

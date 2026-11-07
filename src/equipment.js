@@ -146,16 +146,23 @@ export function buildQuayCranes(data, group) {
         const u = seg.L ? (s - seg.s) / seg.L : 0;
         const x = seg.a[0] + (seg.c[0] - seg.a[0]) * u;
         const z = seg.a[1] + (seg.c[1] - seg.a[1]) * u;
-        let b = g.list[0], best = Infinity;
+        let b = g.list[g.list.length - 1], acc = 0;
         for (const q of g.list) {
-          const d = Math.hypot(q.mid[0] - x, q.mid[1] - z);
-          if (d < best) { best = d; b = q; }
+          const bl = Math.hypot(q.b[0] - q.a[0], q.b[1] - q.a[1]);
+          if (s <= acc + bl) { b = q; break; }
+          acc += bl;
         }
         const setback = 20;      // rail centre sits behind the coping
+        // the quay normal is perpendicular to this very segment; the berth's
+        // water-side normal only fixes which side is seaward
+        const tx = seg.L ? (seg.c[0] - seg.a[0]) / seg.L : 1;
+        const tz = seg.L ? (seg.c[1] - seg.a[1]) / seg.L : 0;
+        let nx = -tz, nz = tx;
+        if (nx * b.normal[0] + nz * b.normal[1] < 0) { nx = -nx; nz = -nz; }
         placements.push({
-          x: x - b.normal[0] * setback,
-          z: z - b.normal[1] * setback,
-          rot: Math.atan2(b.normal[0], b.normal[1]),
+          x: x - nx * setback,
+          z: z - nz * setback,
+          rot: Math.atan2(nx, nz),
           mega: b.depth >= 16,
         });
       }
@@ -259,6 +266,28 @@ function nearestYardDist(x, z, yards) {
   return best;
 }
 
+/** True when (x,z) is on the 180 m quay apron built in terminal.js. */
+function onApron(x, z, data) {
+  const qp = data.quay_chains[0].pts;
+  let best = null;
+  for (let i = 0; i < qp.length - 1; i++) {
+    const a = qp[i], b = qp[i + 1];
+    const dx = b[0] - a[0], dz = b[1] - a[1];
+    const L2 = dx * dx + dz * dz || 1;
+    const t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (z - a[1]) * dz) / L2));
+    const qx = a[0] + dx * t, qz = a[1] + dz * t;
+    const d = Math.hypot(x - qx, z - qz);
+    if (!best || d < best.d) best = { d, qx, qz };
+  }
+  if (!best || best.d > 160) return false;
+  let bn = data.berths[0], bd = Infinity;
+  for (const b of data.berths) {
+    const d = Math.hypot(b.mid[0] - x, b.mid[1] - z);
+    if (d < bd) { bd = d; bn = b; }
+  }
+  return (x - best.qx) * bn.normal[0] + (z - best.qz) * bn.normal[1] < 0;
+}
+
 export function buildTrucks(data, group) {
   const geo = merge([
     box(2.5, 2.9, 6.2, 0, 1.45, 4.4),        // cab
@@ -297,7 +326,8 @@ export function buildTrucks(data, group) {
       let ok = true;
       for (const s of [-5.5, 0, 5.5]) {
         const px = x + ux * s, pz = z + uz * s;
-        if (!pointInPoly(px, pz, data.land) || inYardBlock(px, pz, data.yards)) {
+        if ((!pointInPoly(px, pz, data.land) && !onApron(px, pz, data)) ||
+            inYardBlock(px, pz, data.yards)) {
           ok = false;
           break;
         }

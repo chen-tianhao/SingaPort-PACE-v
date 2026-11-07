@@ -54,7 +54,7 @@ HUD_MQ.addEventListener('change', (e) => {
 });
 
 /* =====================================================================
-   Runtime â€” the hook layer for future dynamic behaviour.
+   Runtime — the hook layer for future dynamic behaviour.
    Every static object can be registered and later animated without
    touching the builder code. tick(dt) drives all registered entities.
    ===================================================================== */
@@ -168,6 +168,32 @@ const region = await fetch('./data/region_coast.json')
 layers.region = region ? buildRegionMap(region, terminalGroup) : null;
 loadBar.style.width = '34%';
 
+/* satellite base layer: real Google imagery in the model frame.  Toggling it
+   on hides the model's ground/roads and lets the yard be compared 1:1. */
+const satelliteGroup = new THREE.Group();
+satelliteGroup.name = 'satellite';
+satelliteGroup.visible = false;
+terminalGroup.add(satelliteGroup);
+layers.satellite = satelliteGroup;
+(async () => {
+  try {
+    const [tex, meta] = await Promise.all([
+      new THREE.TextureLoader().loadAsync('./data/ppt_satellite.jpg'),
+      fetch('./data/ppt_satellite.json').then((r) => r.json()),
+    ]);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 8;
+    const g = new THREE.PlaneGeometry(meta.x1 - meta.x0, meta.z1 - meta.z0);
+    const mesh = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: tex }));
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.set((meta.x0 + meta.x1) / 2, 5.5, (meta.z0 + meta.z1) / 2);
+    mesh.name = 'satellite_plane';
+    satelliteGroup.add(mesh);
+  } catch (e) {
+    console.warn('[PPT] satellite layer unavailable', e);
+  }
+})();
+
 const water = buildWater(data, terminalGroup);
 layers.channels = buildChannels(data, root);
 buildBuoys(data, layers.channels);
@@ -199,7 +225,7 @@ for (const v of vessels) {
   const obj = vesselGroup.children.find((c) => c.name === 'vessel_' + v.id);
   if (obj) runtime.register('vessel_' + v.id, obj, v);
 }
-// example hook: ships idle on a 12 s bob â€” disabled by default, kept as a template
+// example hook: ships idle on a 12 s bob — disabled by default, kept as a template
 runtime.onTick('vessel_V1', null);
 
 /* ------------------------------------------------------------------ HUD */
@@ -219,7 +245,7 @@ if (termList && data.terminals) {
   termList.innerHTML = data.terminals.map((t) => `
     <div class="trow">
       <i style="background:${t.color}"></i><b>${t.id}</b>
-      <span>${t.berth_range}</span><em>${t.n}p Â· ${t.quay} m</em>
+      <span>${t.berth_range}</span><em>${t.n}p · ${t.quay} m</em>
     </div>`).join('');
 }
 
@@ -280,9 +306,9 @@ document.querySelectorAll('#views button').forEach((b) =>
 
 /* ------------------------------------------------------------------ layers */
 const LAYER_LABEL = {
-  cranes: 'å²¸æ¡¥ Quay Cranes', yardcranes: 'åœºæ¡¥ Yard Cranes', containers: 'é›†è£…ç®± Containers',
-  vessels: 'èˆ¹èˆ¶ Vessels', channels: 'èˆªé“ Channels', labels: 'æ ‡æ³¨ Labels', vehicles: 'é›†å¡ Trucks',
-  zones: 'æ³Šä½åˆ†åŒº Berth Zones',
+  cranes: '岸桥 Quay Cranes', yardcranes: '场桥 Yard Cranes', containers: '集装箱 Containers',
+  vessels: '船舶 Vessels', channels: '航道 Channels', labels: '标注 Labels', vehicles: '集卡 Trucks',
+  zones: '泊位分区 Berth Zones', satellite: '卫星底图 Satellite',
 };
 document.querySelectorAll('.sw').forEach((el) => {
   el.addEventListener('click', () => {
@@ -357,7 +383,7 @@ function animate() {
   sky.position.copy(camera.position);   // keep the gradient centred on the viewer
   if (layers.region) updateRegionLabels(layers.region, camera);
 
-  // LOD refresh â€” throttled, and only when the camera actually moved
+  // LOD refresh — throttled, and only when the camera actually moved
   lodTimer += dt;
   if (lodTimer > 0.22 && camera.position.distanceToSquared(lastCam) > 900) {
     lodTimer = 0;
@@ -393,8 +419,8 @@ setTimeout(() => {
   // drop it from the DOM once the fade is over, so it cannot tint a screenshot
   setTimeout(() => load.remove(), 900);
 }, 180);
-console.log(`[PPT] built in ${(performance.now() - t).toFixed(0)} ms Â· ` +
-  `${nQC} quay cranes Â· ${nYC} yard cranes Â· ${yards.total} containers Â· ${nTruck} trucks`);
+console.log(`[PPT] built in ${(performance.now() - t).toFixed(0)} ms · ` +
+  `${nQC} quay cranes · ${nYC} yard cranes · ${yards.total} containers · ${nTruck} trucks`);
 
 /* public handle for the future dynamic layer */
 window.PPT = {
