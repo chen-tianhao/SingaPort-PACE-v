@@ -260,7 +260,7 @@ export function buildTerminal(data, group) {
   }
 
   /* ---- terminal sheds: low service buildings along the back of the yard */
-  if (data.sheds) {
+  if (data.sheds && data.sheds.length) {
     const shedWalls = [];
     const shedRoofs = [];
     for (const b of data.sheds) {
