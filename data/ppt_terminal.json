@@ -20,7 +20,7 @@
   "max_draft_m": 18,
   "deck_m": 5,
   "geometry_source": "ESRI World Imagery z18, exact Web-Mercator registration; quay frontage = OSM way 557975391 (vertices 55-70) snapped onto the imagery water edge (max 18 m); footprint = OSM ways 325897191 + 868420646 clipped to imagery land; berth lengths from MPA Singapore Port Information 2025",
-  "yards": 656,
+  "yards": 666,
   "layout_revision": "2026-11-06b (main roads / gate / yard split / cranes)",
   "quay_length": 14340
  },
@@ -12258,7 +12258,7 @@
    "group": "Y340",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK008"
+   "code": "PPT3-BLK009"
   },
   {
    "id": "Y341",
@@ -12282,7 +12282,7 @@
    "group": "Y341",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK009"
+   "code": "PPT3-BLK010"
   },
   {
    "id": "Y342",
@@ -12306,7 +12306,7 @@
    "group": "Y342",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK010"
+   "code": "PPT3-BLK011"
   },
   {
    "id": "Y343",
@@ -12330,7 +12330,7 @@
    "group": "Y343",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK011"
+   "code": "PPT3-BLK012"
   },
   {
    "id": "Y344",
@@ -12354,7 +12354,7 @@
    "group": "Y344",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK012"
+   "code": "PPT3-BLK013"
   },
   {
    "id": "Y345",
@@ -12378,7 +12378,7 @@
    "group": "Y345",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK013"
+   "code": "PPT3-BLK014"
   },
   {
    "id": "Y346",
@@ -12402,7 +12402,7 @@
    "group": "Y346",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK014"
+   "code": "PPT3-BLK015"
   },
   {
    "id": "Y349",
@@ -12426,7 +12426,7 @@
    "group": "Y349",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK015"
+   "code": "PPT3-BLK017"
   },
   {
    "id": "Y350",
@@ -12450,7 +12450,7 @@
    "group": "Y350",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK016"
+   "code": "PPT3-BLK018"
   },
   {
    "id": "Y351",
@@ -12474,7 +12474,7 @@
    "group": "Y351",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK017"
+   "code": "PPT3-BLK019"
   },
   {
    "id": "Y352",
@@ -12498,7 +12498,7 @@
    "group": "Y352",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK018"
+   "code": "PPT3-BLK020"
   },
   {
    "id": "Y353",
@@ -12522,7 +12522,7 @@
    "group": "Y353",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK019"
+   "code": "PPT3-BLK021"
   },
   {
    "id": "Y354",
@@ -12546,7 +12546,7 @@
    "group": "Y354",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK020"
+   "code": "PPT3-BLK022"
   },
   {
    "id": "Y357",
@@ -12570,7 +12570,7 @@
    "group": "Y357",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK021"
+   "code": "PPT3-BLK024"
   },
   {
    "id": "Y358",
@@ -12594,7 +12594,7 @@
    "group": "Y358",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK022"
+   "code": "PPT3-BLK025"
   },
   {
    "id": "Y359",
@@ -12618,7 +12618,7 @@
    "group": "Y359",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK023"
+   "code": "PPT3-BLK026"
   },
   {
    "id": "Y360",
@@ -12642,7 +12642,7 @@
    "group": "Y360",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK024"
+   "code": "PPT3-BLK027"
   },
   {
    "id": "Y361",
@@ -12666,7 +12666,7 @@
    "group": "Y361",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK025"
+   "code": "PPT3-BLK028"
   },
   {
    "id": "Y362",
@@ -12690,7 +12690,7 @@
    "group": "Y362",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK026"
+   "code": "PPT3-BLK029"
   },
   {
    "id": "Y365",
@@ -12714,7 +12714,7 @@
    "group": "Y365",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK027"
+   "code": "PPT3-BLK031"
   },
   {
    "id": "Y366",
@@ -12738,7 +12738,7 @@
    "group": "Y366",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK028"
+   "code": "PPT3-BLK032"
   },
   {
    "id": "Y367",
@@ -12762,7 +12762,7 @@
    "group": "Y367",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK029"
+   "code": "PPT3-BLK033"
   },
   {
    "id": "Y368",
@@ -12786,7 +12786,7 @@
    "group": "Y368",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK030"
+   "code": "PPT3-BLK034"
   },
   {
    "id": "Y369",
@@ -12810,7 +12810,7 @@
    "group": "Y369",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK031"
+   "code": "PPT3-BLK035"
   },
   {
    "id": "Y370",
@@ -12834,7 +12834,7 @@
    "group": "Y370",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK032"
+   "code": "PPT3-BLK036"
   },
   {
    "id": "Y373",
@@ -12858,7 +12858,7 @@
    "group": "Y373",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK033"
+   "code": "PPT3-BLK038"
   },
   {
    "id": "Y374",
@@ -12882,7 +12882,7 @@
    "group": "Y374",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK034"
+   "code": "PPT3-BLK039"
   },
   {
    "id": "Y375",
@@ -12906,7 +12906,7 @@
    "group": "Y375",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK035"
+   "code": "PPT3-BLK040"
   },
   {
    "id": "Y376",
@@ -12930,7 +12930,7 @@
    "group": "Y376",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK036"
+   "code": "PPT3-BLK041"
   },
   {
    "id": "Y377",
@@ -12954,7 +12954,7 @@
    "group": "Y377",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK037"
+   "code": "PPT3-BLK042"
   },
   {
    "id": "Y378",
@@ -12978,7 +12978,7 @@
    "group": "Y378",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK038"
+   "code": "PPT3-BLK043"
   },
   {
    "id": "Y381",
@@ -13002,7 +13002,7 @@
    "group": "Y381",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK039"
+   "code": "PPT3-BLK045"
   },
   {
    "id": "Y382",
@@ -13026,7 +13026,7 @@
    "group": "Y382",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK040"
+   "code": "PPT3-BLK046"
   },
   {
    "id": "Y383",
@@ -13050,7 +13050,7 @@
    "group": "Y383",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK041"
+   "code": "PPT3-BLK047"
   },
   {
    "id": "Y384",
@@ -13074,7 +13074,7 @@
    "group": "Y384",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK042"
+   "code": "PPT3-BLK048"
   },
   {
    "id": "Y385",
@@ -13098,7 +13098,7 @@
    "group": "Y385",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK043"
+   "code": "PPT3-BLK049"
   },
   {
    "id": "Y386",
@@ -13122,7 +13122,7 @@
    "group": "Y386",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK044"
+   "code": "PPT3-BLK050"
   },
   {
    "id": "Y389",
@@ -13146,7 +13146,7 @@
    "group": "Y389",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK045"
+   "code": "PPT3-BLK052"
   },
   {
    "id": "Y390",
@@ -13170,7 +13170,7 @@
    "group": "Y390",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK046"
+   "code": "PPT3-BLK053"
   },
   {
    "id": "Y391",
@@ -13194,7 +13194,7 @@
    "group": "Y391",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK047"
+   "code": "PPT3-BLK054"
   },
   {
    "id": "Y392",
@@ -13218,7 +13218,7 @@
    "group": "Y392",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK048"
+   "code": "PPT3-BLK055"
   },
   {
    "id": "Y393",
@@ -13242,7 +13242,7 @@
    "group": "Y393",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK049"
+   "code": "PPT3-BLK056"
   },
   {
    "id": "Y394",
@@ -13266,7 +13266,7 @@
    "group": "Y394",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK050"
+   "code": "PPT3-BLK057"
   },
   {
    "id": "Y397",
@@ -13290,7 +13290,7 @@
    "group": "Y397",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK051"
+   "code": "PPT3-BLK059"
   },
   {
    "id": "Y398",
@@ -13314,7 +13314,7 @@
    "group": "Y398",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK052"
+   "code": "PPT3-BLK060"
   },
   {
    "id": "Y399",
@@ -13338,7 +13338,7 @@
    "group": "Y399",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK053"
+   "code": "PPT3-BLK061"
   },
   {
    "id": "Y400",
@@ -13362,7 +13362,7 @@
    "group": "Y400",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK054"
+   "code": "PPT3-BLK062"
   },
   {
    "id": "Y401",
@@ -13386,7 +13386,7 @@
    "group": "Y401",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK055"
+   "code": "PPT3-BLK063"
   },
   {
    "id": "Y402",
@@ -13410,7 +13410,7 @@
    "group": "Y402",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK056"
+   "code": "PPT3-BLK064"
   },
   {
    "id": "Y404",
@@ -13434,7 +13434,7 @@
    "group": "Y404",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK057"
+   "code": "PPT3-BLK066"
   },
   {
    "id": "Y405",
@@ -13458,7 +13458,7 @@
    "group": "Y405",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK058"
+   "code": "PPT3-BLK067"
   },
   {
    "id": "Y406",
@@ -13482,7 +13482,7 @@
    "group": "Y406",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK059"
+   "code": "PPT3-BLK068"
   },
   {
    "id": "Y407",
@@ -13506,7 +13506,7 @@
    "group": "Y407",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK060"
+   "code": "PPT3-BLK069"
   },
   {
    "id": "Y408",
@@ -13530,7 +13530,7 @@
    "group": "Y408",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK061"
+   "code": "PPT3-BLK070"
   },
   {
    "id": "Y409",
@@ -13554,7 +13554,7 @@
    "group": "Y409",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK062"
+   "code": "PPT3-BLK071"
   },
   {
    "id": "Y410",
@@ -13578,7 +13578,7 @@
    "group": "Y410",
    "yc_t": -0.5,
    "yc": 1,
-   "code": "PPT3-BLK063"
+   "code": "PPT3-BLK072"
   },
   {
    "id": "Y425",
@@ -18067,6 +18067,236 @@
    "yc": 1,
    "yc_t": 0.5,
    "code": "PPT2-BLK142"
+  },
+  {
+   "id": "Y607",
+   "tag": "C",
+   "c": [
+    741.4,
+    866.7
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.835,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y607",
+   "yc": 0,
+   "code": "PPT3-BLK008"
+  },
+  {
+   "id": "Y608",
+   "tag": "C",
+   "c": [
+    790.4,
+    895.8
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.95,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y608",
+   "yc": 0,
+   "code": "PPT3-BLK016"
+  },
+  {
+   "id": "Y609",
+   "tag": "C",
+   "c": [
+    838.6,
+    924.3
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.804,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y609",
+   "yc": 0,
+   "code": "PPT3-BLK023"
+  },
+  {
+   "id": "Y610",
+   "tag": "C",
+   "c": [
+    887.6,
+    953.5
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.95,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y610",
+   "yc": 0,
+   "code": "PPT3-BLK030"
+  },
+  {
+   "id": "Y611",
+   "tag": "C",
+   "c": [
+    936.6,
+    982.5
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.95,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y611",
+   "yc": 0,
+   "code": "PPT3-BLK037"
+  },
+  {
+   "id": "Y612",
+   "tag": "C",
+   "c": [
+    985.7,
+    1011.6
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.95,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y612",
+   "yc": 0,
+   "code": "PPT3-BLK044"
+  },
+  {
+   "id": "Y613",
+   "tag": "C",
+   "c": [
+    1034.7,
+    1040.7
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.95,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y613",
+   "yc": 0,
+   "code": "PPT3-BLK051"
+  },
+  {
+   "id": "Y614",
+   "tag": "C",
+   "c": [
+    1083.7,
+    1069.8
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.95,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y614",
+   "yc": 0,
+   "code": "PPT3-BLK058"
+  },
+  {
+   "id": "Y615",
+   "tag": "C",
+   "c": [
+    1132.8,
+    1098.9
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.95,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y615",
+   "yc": 0,
+   "code": "PPT3-BLK065"
+  },
+  {
+   "id": "Y616",
+   "tag": "C",
+   "c": [
+    1181.8,
+    1128.0
+   ],
+   "w": 34.0,
+   "l": 196.6,
+   "angle": -30.7,
+   "rows": 12,
+   "bays": 14,
+   "tiers": 5,
+   "row_pitch": 2.6,
+   "bay_pitch": 13.4,
+   "tier_h": 2.62,
+   "fill": 0.731,
+   "crane": "RMG",
+   "terminal": "PPT3",
+   "group": "Y616",
+   "yc": 0,
+   "code": "PPT3-BLK073"
   }
  ],
  "roads": [
