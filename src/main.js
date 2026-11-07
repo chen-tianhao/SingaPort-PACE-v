@@ -108,6 +108,9 @@ controls.maxPolarAngle = Math.PI * 0.495;
 controls.minDistance = 40;
 controls.maxDistance = 14000;
 controls.screenSpacePanning = false;
+// desktop: left = pan, right = orbit; touch: one finger = pan, two = orbit + pinch
+controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
+controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_ROTATE };
 
 /* ------------------------------------------------------------------ sky */
 const sky = new THREE.Mesh(
