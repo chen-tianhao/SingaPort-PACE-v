@@ -71,7 +71,7 @@ let _laneMat = null;
 function laneMat() {
   if (!_laneMat) {
     _laneMat = new THREE.MeshStandardMaterial({
-      color: 0x3c434a, roughness: 0.97, metalness: 0.02,
+      color: 0x5a6065, roughness: 0.97, metalness: 0.02,
       // the lane strips are coplanar with the apron plates; bias them towards
       // the camera instead of stacking tenths of a metre of fake height
       polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,

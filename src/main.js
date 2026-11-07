@@ -255,7 +255,7 @@ const perfTri = document.getElementById('tri');
 const lodEl = document.getElementById('lod');
 
 /* ------------------------------------------------------------------ views */
-const _b = data.berths.find((b) => b.id === 'P17') || data.berths[0];
+const _b = data.berths.find((b) => b.id === 'B17') || data.berths[0];
 const _vb = document.getElementById('vb');
 if (_vb) _vb.textContent = _b.id;
 const _n = _b.normal;
