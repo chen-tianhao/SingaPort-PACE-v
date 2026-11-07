@@ -4,6 +4,7 @@ import { PAL, mat } from './geo.js';
 import { buildTerminal, buildWater } from './terminal.js';
 import { buildRegionMap, updateRegionLabels } from './region.js';
 import { buildIds } from './ids.js';
+import { loadPortAssets } from './assets.js';
 import { buildQuayCranes, buildYardCranes, buildTrucks, buildVessels } from './equipment.js';
 import { buildYards } from './yards.js';
 import { buildChannels, buildBuoys, addFog } from './water.js';
@@ -144,6 +145,13 @@ const loadBar = document.getElementById('bar');
 const data = await fetch('./data/ppt_terminal.json').then((r) => r.json());
 loadBar.style.width = '18%';
 
+/* optional high-detail PSA assets; procedural geometry is the fallback */
+const assets = await loadPortAssets().catch((e) => {
+  console.warn('[PPT] port assets unavailable, using procedural geometry', e);
+  return null;
+});
+loadBar.style.width = '26%';
+
 const runtime = new Runtime();
 const layers = {};
 const root = new THREE.Group();
@@ -203,12 +211,12 @@ loadBar.style.width = '46%';
 const yards = buildYards(data, yardGroup);
 loadBar.style.width = '68%';
 
-const nQC = buildQuayCranes(data, craneGroup);
-const nYC = buildYardCranes(data, yardCraneGroup);
-const nTruck = buildTrucks(data, truckGroup);
+const nQC = buildQuayCranes(data, craneGroup, assets);
+const nYC = buildYardCranes(data, yardCraneGroup, assets);
+const nTruck = buildTrucks(data, truckGroup, assets);
 loadBar.style.width = '86%';
 
-const vessels = buildVessels(data, vesselGroup);
+const vessels = buildVessels(data, vesselGroup, assets);
 loadBar.style.width = '96%';
 
 /* ------------------------------------------------------------------ entity registry */

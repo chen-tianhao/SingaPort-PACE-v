@@ -106,6 +106,19 @@
 - **B27–B29 保留 PPT4**；**B30** 移到北面空档（327 m），**B31–B41** 顺延一格，旧 **B41 格**空出（无泊位/岸桥）；
 - 岸桥重新分布，147 台不变；泊位箱长合计 14 111 m。
 
+### 0.8 2026-11-07 3D 资产替换
+
+`E:\nus_code_git\3DModelLibraries\TransferToGLB\PortGLB` 的 GLB 可用（GLB 2.0、内嵌纹理、毫米单位、Y 向上），已复制到 `assets/models/`（不引用原目录）：
+
+| 资产 | 替换 | 数量/缩放 |
+|---|---|---|
+| QuayCrane.glb | 岸桥 | 147，scale 0.0007（高≈55 m），绕 Y 转 180°：长臂朝水、门腿在陆，再向水侧平移 32 m |
+| YardCrane.glb | 场桥 | 409，先转 90°，高度 RTG 0.77 / RMG 1.05，跨度按 (w+11)/49.1 自适应 |
+| PortAGV_Yellow.glb | 集卡 | 719，scale 1.0（≈13 m） |
+| 5 艘集装箱船 GLB | 集装箱船 | 9 艘按 loa 选型，缩放到 `v.loa`；PCTC V8 保留程序化 |
+
+材质 metalness 0.04 / roughness 0.86，并提亮 1.55×；加载失败自动回退程序化几何。新增 `src/assets.js` 与 `vendor/addons/loaders/GLTFLoader.js`，三角面约 17.7M。
+
 未完成：箱区格网的逐块控制点配准（仍可能差半块）、东臂 30 m/11 排箱区的再细分。
 
 ---

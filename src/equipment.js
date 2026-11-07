@@ -93,7 +93,7 @@ function ohbcGeometry(span = 45.4, girderH = 28) {
 }
 
 /* ------------------------------------------------------------------ placement */
-export function buildQuayCranes(data, group) {
+export function buildQuayCranes(data, group, assets = null) {
   const berths = data.berths.filter((b) => b.type === 'container');
   const placements = [];
 
@@ -172,6 +172,24 @@ export function buildQuayCranes(data, group) {
     });
   }
 
+  if (assets && assets.quayCrane && assets.quayCrane.length) {
+    // the GLB portal sits deeper than the procedural one; pull the whole crane
+    // (and its ID label) 22 m toward the water
+    placements.forEach((p) => {
+      p.x += Math.sin(p.rot) * 32;
+      p.z += Math.cos(p.rot) * 32;
+    });
+    group.userData.quayCranes = placements;
+    for (const { geo, mat: material } of assets.quayCrane) {
+      const m = new THREE.InstancedMesh(geo, material, placements.length);
+      m.frustumCulled = false;
+      placements.forEach((p, i) => setInst(m, i, p.x, 5, p.z, 1, 1, 1, p.rot));
+      m.instanceMatrix.needsUpdate = true;
+      group.add(m);
+    }
+    return placements.length;
+  }
+
   const mega = placements.filter((p) => p.mega);
   const std = placements.filter((p) => !p.mega);
 
@@ -198,7 +216,7 @@ export function buildQuayCranes(data, group) {
   return placements.length;
 }
 
-export function buildYardCranes(data, group) {
+export function buildYardCranes(data, group, assets = null) {
   const rmgGeo = yardCraneGeometry(34, 21, 4);      // 32–36 m blocks (north bank, east arm)
   const rtgGeo = yardCraneGeometry(25, 18, 0);      // 19.5 m blocks (west block)
   const ohbcGeo = ohbcGeometry();
@@ -219,10 +237,31 @@ export function buildYardCranes(data, group) {
       code: `${y.code || y.id}-YC1`,
       block: y.code || y.id,
       terminal: y.terminal || 'PPT?',
+      span: y.w,
     };
     if (y.crane === 'OHBC') ohbc.push(item);
     else if (y.crane === 'RMG') rmg.push(item);
     else rtg.push(item);
+  }
+
+  if (assets && assets.yardCrane && assets.yardCrane.length) {
+    const buildGLB = (list, heightScale) => {
+      if (!list.length) return 0;
+      for (const { geo, mat: material } of assets.yardCrane) {
+        const m = new THREE.InstancedMesh(geo, material, list.length);
+        m.frustumCulled = false;
+        list.forEach((p, k) => {
+          // the GLB rail gauge is 32.4 m; stretch it to the block width + 3 m
+          const sx = Math.max(0.55, ((p.span || 30) + 11) / 49.1);
+          setInst(m, k, p.x, 5, p.z, sx, heightScale, heightScale, p.rot);
+        });
+        m.instanceMatrix.needsUpdate = true;
+        group.add(m);
+      }
+      return list.length;
+    };
+    group.userData.yardCranes = [...rmg, ...rtg, ...ohbc];
+    return buildGLB(rmg, 1.05) + buildGLB(rtg, 0.77) + buildGLB(ohbc, 0.9);
   }
 
   const mk = (list, geo, color) => {
@@ -300,7 +339,7 @@ function onApron(x, z, data) {
   return (x - best.qx) * bn.normal[0] + (z - best.qz) * bn.normal[1] < 0;
 }
 
-export function buildTrucks(data, group) {
+export function buildTrucks(data, group, assets = null) {
   const geo = merge([
     box(2.5, 2.9, 6.2, 0, 1.45, 4.4),        // cab
     box(2.55, 0.5, 12.6, 0, 0.55, -3.2),     // chassis
@@ -366,6 +405,18 @@ export function buildTrucks(data, group) {
       });
     }
   });
+  if (assets && assets.agv && assets.agv.length) {
+    for (const { geo: agvGeo, mat: agvMat } of assets.agv) {
+      const m = new THREE.InstancedMesh(agvGeo, agvMat, list.length);
+      m.frustumCulled = false;
+      list.forEach((p, i) => setInst(m, i, p.x, 5, p.z, 1, 1, 1, p.rot));
+      m.instanceMatrix.needsUpdate = true;
+      group.add(m);
+    }
+    group.userData.trucks = list;
+    return list.length;
+  }
+
   const m = instanced(geo, mat(0xffffff, { roughness: 0.7 }), list.length);
   list.forEach((p, i) => {
     setInst(m, i, p.x, 5, p.z, 1, 1, 1, p.rot);
@@ -463,17 +514,39 @@ function makeShip(v) {
   return g;
 }
 
-export function buildVessels(data, group) {
+function pickVessel(V, loa) {
+  if (loa >= 380) return V.msc;
+  if (loa >= 340) return V.cmacgm;
+  if (loa >= 280) return V.kota;
+  if (loa >= 190) return V.vistula;
+  return V.pacific;
+}
+
+export function buildVessels(data, group, assets = null) {
   const byBerth = new Map(data.berths.map((b) => [b.id, b]));
   const out = [];
   for (const v of data.vessels) {
     const b = byBerth.get(v.berth);
     if (!b) continue;
-    const ship = makeShip(v);
-    // berth tangent â†’ ship heading along the quay
+    const proto = (assets && assets.vessels && v.type !== 'PCTC')
+      ? pickVessel(assets.vessels, v.loa) : null;
+    let ship = null;
+    let beam = v.beam;
+    if (proto) {
+      ship = proto.root.clone(true);
+      const lenMm = proto.box.max.x - proto.box.min.x;
+      const beamMm = proto.box.max.z - proto.box.min.z;
+      const s = v.loa / lenMm;
+      ship.scale.setScalar(s);
+      beam = beamMm * s;
+    } else {
+      ship = makeShip(v);
+    }
+    // berth tangent → ship heading along the quay
     const dx = b.b[0] - b.a[0], dz = b.b[1] - b.a[1];
-    const rot = Math.atan2(-dz, dx);
-    ship.position.set(b.mid[0] + b.normal[0] * (v.beam / 2 + 26), 0, b.mid[1] + b.normal[1] * (v.beam / 2 + 26));
+    const rot = Math.atan2(-dz, dx) + (proto ? Math.PI : 0);
+    ship.position.set(b.mid[0] + b.normal[0] * (beam / 2 + 26), 0,
+      b.mid[1] + b.normal[1] * (beam / 2 + 26));
     ship.rotation.y = rot;
     ship.name = 'vessel_' + v.id;
     group.add(ship);

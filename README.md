@@ -58,6 +58,7 @@ npx serve .
 | 场桥 | **409 台** | 依据 z20 卫星抽样：西块/北岸 RTG 约 1 台/块，连接段 C 区 1 台/块，东臂 D 区 1/2 块（255 RTG + 154 RMG）；每台停在块端而非块中心，跨距 25 / 34 m |
 | 建筑/仓库 | 0 | PPT2 靠 PPAT 的 U 形建筑经 Google 标签核实是 **Multi-Level Automotive Yard (MAY)**，属于 PPAT 停车场，已删除并复原其四周 5 块箱区 |
 | 卫星底图 | 1 张 4096×3218 | Google z18 影像按模型坐标重采样，图层面板「卫星底图 Satellite」开关，用于逐块比对 |
+| 3D 资产 | 8 个 GLB / 34 MB | QuayCrane、YardCrane、PortAGV_Yellow + 5 艘集装箱船，复制在 assets/models/；替换对应程序化几何，加载失败自动回退 |
 | 编号 | 660 箱区 / 410 场桥 / 147 岸桥 / 719 集卡 | 箱区 `PPT1-BLK001`、场桥 `PPT1-BLK001-YC1`、岸桥 `PPT1-QC01`、集卡 `PM-0001`；图层面板「编号 IDs」默认关闭，打开后按相机距离与屏幕避让显示 |
 | 船舶 | 12 | 400 m ULCV、Neo-Panamax、Feeder、PCTC，全部停在水侧（泊位法线方向） |
 | 航道 | 4 条 | West Keppel / Jurong / Sinki / Pasir Panjang Sector 1；岸边采样点 0 个落入陆域 |
@@ -344,5 +345,25 @@ z = −(lat − lat0) · 110574          # +Z 向南，与场景一致
 - **B30** 移到北面转角空档（长 327 m），**B31–B41** 依次占前一个泊位格；旧 **B41 格**（东北尖端）空出，不再有泊位和岸桥；
 - 岸桥按新泊位位置重新分布（147 台不变）；
 - 泊位箱长合计 **14 111 m**（PPT5 2 198、PPT6 2 100）。
+
+现状：**656 箱区 / 409 场桥 / 152 415 箱 / 41 泊位**。
+
+---
+
+## 17. 2026-11-07 3D 资产替换
+
+E:\nus_code_git\3DModelLibraries\TransferToGLB\PortGLB 的 GLB 资产可用：GLB 2.0、内嵌纹理、毫米单位、Y 向上、无动画。已复制到 assets/models/，不引用原目录。
+
+| 资产 | 替换对象 | 数量 | 缩放 / 处理 |
+|---|---|---|---|
+| QuayCrane.glb | 岸桥 | 147 | InstancedMesh；scale **0.0007**（高≈55 m），实例绕 Y 再转 **180°**（GLB 的 boom 原朝陆侧），使长臂朝水域、门腿在陆侧；整体再向水侧平移 **32 m** |
+| YardCrane.glb | 场桥 | 409 | InstancedMesh；高度 RTG **0.77** / RMG **1.05**，先绕 Y 旋转 **90°**，再按旋转后跨度自适应（两侧各留 5.5 m） sx=(w+11)/49.1 |
+| PortAGV_Yellow.glb | 集卡 | 719 | InstancedMesh；scale 1.0（长≈13 m） |
+| NewMSC / CMACGM / KotaOcean / Vistula / Pacific | 集装箱船 | 11 艘 | 按 v.loa 选型并缩放到目标船长；PCTC（V8）保留程序化几何 |
+
+- 材质统一 metalness 0.04 / roughness 0.86，并按 color×1.55 + emissive 0.22 提亮；
+- 加载走 src/assets.js + vendor/addons/loaders/GLTFLoader.js，GLB 加载失败时自动回退到原程序化几何；
+- 场景三角面约 **17.7M**（原 ~3.7M），headless SwiftShader 约 10 FPS，真实 GPU 会高很多；
+- 资产总大小 **34 MB**（assets/models/）。
 
 现状：**656 箱区 / 409 场桥 / 152 415 箱 / 41 泊位**。

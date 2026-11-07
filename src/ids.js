@@ -40,7 +40,7 @@ export function buildIds(data, groups) {
 
   for (const b of data.yards) add(b.code, b.c[0], 24, b.c[1], 'block', b.terminal);
   for (const p of (groups.yardcranes?.userData?.yardCranes || [])) {
-    add(p.code, p.x, 36, p.z, 'yc', p.terminal);
+    add(p.code, p.x, 48, p.z, 'yc', p.terminal);
   }
   for (const p of (groups.cranes?.userData?.quayCranes || [])) {
     add(p.code, p.x, 64, p.z, 'qc', p.terminal);
