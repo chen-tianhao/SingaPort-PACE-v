@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ppt-layout.schema.json",
+  "title": "PPT terminal layout",
+  "description": "Compact, importable layout for the Pasir Panjang 3D scene. All coordinates are metres in the local ENU frame: +X east, +Z south, +Y up; deck height is in meta.deck.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "meta", "land", "quay", "terminals", "berths", "yards"],
+  "properties": {
+    "format": { "const": "ppt-layout" },
+    "version": { "const": 1 },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "origin", "units", "deck"],
+      "properties": {
+        "name": { "type": "string" },
+        "origin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lon", "lat"],
+          "properties": {
+            "lon": { "type": "number" },
+            "lat": { "type": "number" }
+          }
+        },
+        "units": { "const": "m" },
+        "axes": { "type": "string" },
+        "deck": { "type": "number" },
+        "generated": { "type": "string" }
+      }
+    },
+    "land": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/$defs/point" }
+    },
+    "quay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pts"],
+      "properties": {
+        "pts": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point" } }
+      }
+    },
+    "terminals": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/terminal" }
+    },
+    "berths": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/berth" }
+    },
+    "yards": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/yard" }
+    },
+    "roads": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "front": { "type": "array", "items": { "$ref": "#/$defs/frontRoad" } },
+        "main": { "type": "array", "items": { "$ref": "#/$defs/mainRoad" } },
+        "lanes": { "type": "array", "items": { "$ref": "#/$defs/lane" } }
+      }
+    },
+    "vessels": { "type": "array", "items": { "$ref": "#/$defs/vessel" } },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "z"],
+      "properties": {
+        "x": { "type": "number" },
+        "z": { "type": "number" },
+        "angle": { "type": "number" }
+      }
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "type": "number" }
+    },
+    "terminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "color", "qc"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Z0-9]+$" },
+        "name": { "type": "string" },
+        "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "qc": { "type": "integer", "minimum": 0 },
+        "anchor": { "$ref": "#/$defs/point" }
+      }
+    },
+    "berth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "terminal", "a", "b"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^B[0-9]{2}$" },
+        "terminal": { "type": "string" },
+        "a": { "$ref": "#/$defs/point" },
+        "b": { "$ref": "#/$defs/point" },
+        "depth": { "type": "number", "exclusiveMinimum": 0 },
+        "type": { "enum": ["container", "general", "pasir"] },
+        "normal": { "$ref": "#/$defs/point" },
+        "note": { "type": "string" }
+      }
+    },
+    "yard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "code", "terminal", "c", "w", "l", "angle", "rows", "bays",
+        "tiers", "row_pitch", "bay_pitch", "tier_h", "fill", "crane"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "code": { "type": "string", "pattern": "^[A-Z0-9]+-BLK[0-9]{3}$" },
+        "terminal": { "type": "string" },
+        "c": { "$ref": "#/$defs/point" },
+        "w": { "type": "number", "exclusiveMinimum": 0 },
+        "l": { "type": "number", "exclusiveMinimum": 0 },
+        "angle": { "type": "number" },
+        "rows": { "type": "integer", "minimum": 1 },
+        "bays": { "type": "integer", "minimum": 1 },
+        "tiers": { "type": "integer", "minimum": 1 },
+        "row_pitch": { "type": "number", "exclusiveMinimum": 0 },
+        "bay_pitch": { "type": "number", "exclusiveMinimum": 0 },
+        "tier_h": { "type": "number", "exclusiveMinimum": 0 },
+        "fill": { "type": "number", "minimum": 0, "maximum": 1 },
+        "crane": { "enum": ["RTG", "RMG", "OHBC", "none"] },
+        "yc": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "yc_t": { "type": "number" },
+        "group": { "type": "string" },
+        "tag": { "type": "string" }
+      }
+    },
+    "frontRoad": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["a", "b"],
+      "properties": {
+        "id": { "type": "string" },
+        "a": { "$ref": "#/$defs/point" },
+        "b": { "$ref": "#/$defs/point" },
+        "width": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "mainRoad": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pts"],
+      "properties": {
+        "name": { "type": "string" },
+        "cls": { "type": "string" },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "pts": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point" } }
+      }
+    },
+    "lane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["a", "b"],
+      "properties": {
+        "a": { "$ref": "#/$defs/point" },
+        "b": { "$ref": "#/$defs/point" },
+        "width": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "vessel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "loa", "beam", "berth"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "loa": { "type": "number", "exclusiveMinimum": 0 },
+        "beam": { "type": "number", "exclusiveMinimum": 0 },
+        "berth": { "type": "string" },
+        "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+      }
+    }
+  }
+}

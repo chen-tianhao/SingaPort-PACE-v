@@ -62,7 +62,23 @@
   .kpi .k{font-size:10px;color:var(--dim);margin-top:2px;letter-spacing:.06em}
 
   /* layer switch */
-  #layers{right:18px;top:16px;padding:12px 14px;width:196px}
+  #layers{right:18px;top:70px;padding:12px 14px;width:196px}
+  #menu-btn{position:fixed;right:18px;top:18px;z-index:90;pointer-events:auto;width:40px;height:40px;border-radius:10px;
+    border:1px solid var(--line);background:var(--panel);color:#dbe6ef;font-size:18px;line-height:1;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px)}
+  #menu-btn:hover{border-color:rgba(63,169,217,.55);color:#fff}
+  #menu-pop{position:fixed;right:18px;top:64px;z-index:91;pointer-events:auto;width:214px;padding:7px;border-radius:11px;
+    background:rgba(12,18,25,.97);border:1px solid var(--line);box-shadow:0 14px 40px rgba(0,0,0,.45);
+    display:none}
+  #menu-pop.open{display:block}
+  #menu-pop button{display:block;width:100%;text-align:left;padding:9px 10px;border:0;border-radius:7px;
+    background:transparent;color:#dbe6ef;font:inherit;font-size:11.5px;cursor:pointer}
+  #menu-pop button:hover{background:rgba(63,169,217,.16);color:#fff}
+  #menu-status{font-size:10px;color:#8fa1b1;padding:7px 9px 3px;line-height:1.5;white-space:pre-wrap}
+  @media (max-width:820px){
+    #menu-btn{top:8px;right:8px;width:34px;height:34px;border-radius:9px;font-size:16px}
+    #menu-pop{top:50px;right:8px;width:198px}
+  }
   .ttl{font-size:10px;letter-spacing:.2em;color:var(--dim);margin-bottom:9px}
   #layers .pbody{margin-top:9px}
   .sw{display:flex;align-items:center;justify-content:space-between;
@@ -203,7 +219,17 @@
   </div>
   </div><!-- /hud-col -->
 
-  <div id="layers" class="panel" data-panel>
+  '<button id="menu-btn" aria-label="菜单" aria-expanded="false">☰</button>
+<div id="menu-pop">
+  <button data-act="export">导出码头布局</button>
+  <button data-act="import">导入码头布局</button>
+  <button data-act="sample">下载样例 JSON</button>
+  <button data-act="reset">恢复默认布局</button>
+  <div id="menu-status"></div>
+</div>
+<input id="layout-file" type="file" accept=".json,application/json" hidden>
+
+<div id="layers" class="panel" data-panel>'
     <div class="phead"><span class="ttl">图层 / LAYERS</span><i class="chev"></i></div>
     <div class="pbody">
       <div class="sw" data-layer="custom"><span>自定义模型 Custom Models</span><i></i></div>

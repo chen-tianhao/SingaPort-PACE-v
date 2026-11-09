@@ -25,6 +25,7 @@ function textSprite(text, { color = '#bfe3f5', bg = 'rgba(6,16,24,0.72)', w = 51
 
 export function buildChannels(data, group) {
   const g = new THREE.Group();
+  if (!data.channels?.length && !data.anchorages?.length) return g;
   const surfaces = [];
   const centres = [];
   for (const ch of data.channels) {

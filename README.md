@@ -39,6 +39,7 @@ npx serve .
 | 右上图层开关 | 岸桥、场桥、集装箱、船舶、航道、标注、集卡、**泊位分区**、卫星底图、**编号 IDs** |
 | 左上码头表 | 7 个码头的泊位区间、泊位数、岸线长（点击无操作，纯图例） |
 | **面板标题栏** | 点击即折叠/展开该面板，折叠状态写进 `localStorage`（`ppt.hud.v1`），刷新后保留 |
+| **右上角 ☰** | 导出码头布局 / 导入码头布局 / 下载样例 JSON / 恢复默认布局 |
 
 **手机 / 窄屏（≤ 820 px）**：所有面板默认折叠成一行行小卡片，横向自动换行，只占顶部约 120–150 px；展开的卡片独占一行并把其余卡片下推。`#scale` 比例尺在窄屏隐藏，机位按钮改为可横向滑动的单行。竖屏时相机会自动加宽垂直视场（上限 72°）并按比例后撤，避免 16:9 的取景被裁掉两侧。
 
@@ -443,3 +444,22 @@ E:\nus_code_git\3DModelLibraries\TransferToGLB\PortGLB 的 GLB 资产可用：GL
 - 箱区、场桥、岸桥、泊位、船舶均未改动。
 
 现状：**666 箱区 / 409 场桥 / 147 岸桥 / 41 泊位 / 15 前沿路 + 5 主干路 + 53 车道（接入点切开后 25 + 47 + 53 段）**。
+---
+
+## 23. 2026-11-09 汉堡菜单：布局导出 / 导入
+
+右上角新增 **☰** 总菜单：
+
+- **导出码头布局**：把当前运行时数据转换成紧凑布局 JSON（`format: "ppt-layout"`, `version: 1`）并下载；
+- **导入码头布局**：读取 JSON → 内置校验 → 写入 `localStorage['ppt.layout.v1']` → 刷新重建；
+- **下载样例 JSON**：下载 `data/ppt_layout.sample.json`；
+- **恢复默认布局**：清除本地导入并回到 `data/ppt_terminal.json`。
+
+格式与样例：
+
+- 样例 [data/ppt_layout.sample.json](data/ppt_layout.sample.json)：2 码头 / 2 泊位 / 3 箱区 / 3 类道路 / 2 船 / 1 大门；
+- Schema [data/ppt_layout.schema.json](data/ppt_layout.schema.json)；
+- 说明 [docs/layout-format.md](docs/layout-format.md)；
+- 转换逻辑在 [src/layout.js](src/layout.js)：导出丢弃派生字段，导入时重算泊位中点/长度/法线、码头泊位区间/长度/锚点、箱区默认编组等。
+
+导入失败不会写存储，只显示具体字段错误；导入后刷新页面即可看到新布局。

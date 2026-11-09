@@ -5,6 +5,7 @@ import { buildTerminal, buildWater } from './terminal.js';
 import { buildRegionMap, updateRegionLabels } from './region.js';
 import { buildIds } from './ids.js';
 import { loadPortAssets } from './assets.js';
+import { toLayout, fromLayout, validateLayout, LAYOUT_STORAGE_KEY } from './layout.js';
 import { buildQuayCranes, buildYardCranes, buildTrucks, buildVessels } from './equipment.js';
 import { buildYards } from './yards.js';
 import { buildChannels, buildBuoys, addFog } from './water.js';
@@ -145,7 +146,24 @@ scene.add(rim);
 
 /* ------------------------------------------------------------------ data + build */
 const loadBar = document.getElementById('bar');
-const data = await fetch('./data/ppt_terminal.json').then((r) => r.json());
+let data = null;
+let importedLayoutActive = false;
+try {
+  const raw = localStorage.getItem(LAYOUT_STORAGE_KEY);
+  if (raw) {
+    const layout = JSON.parse(raw);
+    const errs = validateLayout(layout);
+    if (!errs.length) {
+      data = fromLayout(layout);
+      importedLayoutActive = true;
+    } else {
+      console.warn('[PPT] stored layout invalid, using default', errs.slice(0, 3));
+    }
+  }
+} catch (e) {
+  console.warn('[PPT] stored layout unreadable, using default', e);
+}
+if (!data) data = await fetch('./data/ppt_terminal.json').then((r) => r.json());
 loadBar.style.width = '18%';
 
 /* optional high-detail PSA assets; loaded lazily by the 自定义模型 switch */
@@ -357,8 +375,95 @@ if (termList && data.terminals) {
   });
 }
 
-const perfFps = document.getElementById('fps');
-const perfDc = document.getElementById('dc');
+/* ------------------------------------------------------------ export/import */
+const menuBtn = document.getElementById('menu-btn');
+const menuPop = document.getElementById('menu-pop');
+const menuStatus = document.getElementById('menu-status');
+const layoutFile = document.getElementById('layout-file');
+
+function setMenu(open) {
+  menuPop.classList.toggle('open', open);
+  menuBtn.setAttribute('aria-expanded', String(open));
+}
+
+function setStatus(text) {
+  if (menuStatus) menuStatus.textContent = text;
+}
+
+function downloadText(text, filename) {
+  const blob = new Blob([text], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function exportLayout() {
+  const layout = toLayout(data);
+  const d = new Date();
+  const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}`;
+  downloadText(JSON.stringify(layout, null, 2), `ppt-layout-${stamp}.json`);
+  setStatus(`已导出：${layout.terminals.length} 码头 / ${layout.berths.length} 泊位 / ${layout.yards.length} 箱区`);
+}
+
+function resetLayout() {
+  localStorage.removeItem(LAYOUT_STORAGE_KEY);
+  location.reload();
+}
+
+if (menuBtn && menuPop) {
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setMenu(!menuPop.classList.contains('open'));
+  });
+  document.addEventListener('click', (e) => {
+    if (!menuPop.contains(e.target) && !menuBtn.contains(e.target)) setMenu(false);
+  });
+  menuPop.querySelectorAll('button[data-act]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      const act = b.dataset.act;
+      if (act === 'export') {
+        exportLayout();
+      } else if (act === 'sample') {
+        try {
+          const text = await fetch('./data/ppt_layout.sample.json').then((r) => r.text());
+          downloadText(text, 'ppt_layout.sample.json');
+          setStatus('已下载样例 JSON');
+        } catch (e) {
+          setStatus('样例下载失败');
+        }
+      } else if (act === 'reset') {
+        resetLayout();
+      } else if (act === 'import') {
+        layoutFile.value = '';
+        layoutFile.click();
+      }
+    });
+  });
+  layoutFile?.addEventListener('change', async () => {
+    const file = layoutFile.files?.[0];
+    if (!file) return;
+    try {
+      const layout = JSON.parse(await file.text());
+      const errs = validateLayout(layout);
+      if (errs.length) throw new Error(errs.slice(0, 3).join('；'));
+      localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(layout));
+      setStatus('校验通过，正在重建场景…');
+      location.reload();
+    } catch (e) {
+      setStatus('导入失败：' + e.message);
+    } finally {
+      layoutFile.value = '';
+    }
+  });
+  if (importedLayoutActive) setStatus('当前：本地导入布局（菜单可恢复默认）');
+}
+
+const perfFps = document.getElementById('fps');const perfDc = document.getElementById('dc');
 const perfTri = document.getElementById('tri');
 const lodEl = document.getElementById('lod');
 
@@ -553,6 +658,8 @@ console.log(`[PPT] built in ${(performance.now() - t).toFixed(0)} ms · ` +
 window.PPT = {
   scene, camera, controls, renderer, data, runtime, yards, layers, goView,
   pickable: { yardGroup, craneGroup, vesselGroup },
+  layout: { toLayout, fromLayout, validateLayout },
+  exportLayout, resetLayout,
 };
 
 /* deep link: ?view=yard|gate|crane|berth|sea|overview */

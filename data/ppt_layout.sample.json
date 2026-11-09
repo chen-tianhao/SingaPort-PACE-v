@@ -1,0 +1,107 @@
+{
+  "format": "ppt-layout",
+  "version": 1,
+  "meta": {
+    "name": "PPT Layout Sample",
+    "origin": { "lon": 103.76, "lat": 1.28 },
+    "units": "m",
+    "axes": "+X east, +Z south, +Y up",
+    "deck": 5.0,
+    "generated": "2026-11-09"
+  },
+  "land": [
+    [0, 0],
+    [620, 0],
+    [620, 340],
+    [0, 340]
+  ],
+  "quay": {
+    "pts": [
+      [0, 0],
+      [620, 0]
+    ]
+  },
+  "terminals": [
+    { "id": "PPT1", "name": "Terminal 1", "color": "#E4572E", "qc": 3 },
+    { "id": "PPT2", "name": "Terminal 2", "color": "#F0A202", "qc": 2 }
+  ],
+  "berths": [
+    { "id": "B01", "terminal": "PPT1", "a": [40, 0], "b": [280, 0], "depth": 16, "type": "container" },
+    { "id": "B02", "terminal": "PPT2", "a": [340, 0], "b": [580, 0], "depth": 15, "type": "container" }
+  ],
+  "yards": [
+    {
+      "id": "Y001",
+      "code": "PPT1-BLK001",
+      "terminal": "PPT1",
+      "c": [160, 110],
+      "w": 40,
+      "l": 150,
+      "angle": 0,
+      "rows": 8,
+      "bays": 6,
+      "tiers": 4,
+      "row_pitch": 2.6,
+      "bay_pitch": 14.5,
+      "tier_h": 2.62,
+      "fill": 0.85,
+      "crane": "RTG",
+      "yc": 1,
+      "yc_t": -0.5
+    },
+    {
+      "id": "Y002",
+      "code": "PPT1-BLK002",
+      "terminal": "PPT1",
+      "c": [160, 260],
+      "w": 40,
+      "l": 60,
+      "angle": 0,
+      "rows": 8,
+      "bays": 4,
+      "tiers": 3,
+      "row_pitch": 2.6,
+      "bay_pitch": 14.5,
+      "tier_h": 2.62,
+      "fill": 0.55,
+      "crane": "RTG",
+      "yc": 0
+    },
+    {
+      "id": "Y003",
+      "code": "PPT2-BLK001",
+      "terminal": "PPT2",
+      "c": [430, 120],
+      "w": 34,
+      "l": 120,
+      "angle": 0,
+      "rows": 12,
+      "bays": 5,
+      "tiers": 5,
+      "row_pitch": 2.6,
+      "bay_pitch": 14.5,
+      "tier_h": 2.62,
+      "fill": 0.7,
+      "crane": "RMG",
+      "yc": 1,
+      "yc_t": -0.5
+    }
+  ],
+  "roads": {
+    "front": [
+      { "id": "F01", "a": [20, 25], "b": [600, 25], "width": 20 }
+    ],
+    "main": [
+      { "name": "Main Avenue", "width": 24, "pts": [[300, 20], [300, 320]] }
+    ],
+    "lanes": [
+      { "a": [60, 200], "b": [560, 200], "width": 10 },
+      { "a": [250, 20], "b": [250, 320], "width": 10 }
+    ]
+  },
+  "vessels": [
+    { "id": "V1", "type": "Feeder", "loa": 180, "beam": 28, "berth": "B01", "color": "#2f4d6b" },
+    { "id": "V2", "type": "Neo-Panamax", "loa": 260, "beam": 40, "berth": "B02", "color": "#1b2a3a" }
+  ],
+  "gate": { "x": 300, "z": 330, "angle": 0 }
+}
